@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <array name="books_array">
+        <item>1. Mojžišova - Genezis</item>
+        <item>2. Mojžišova - Exodus</item>
+        <item>3. Mojžišova - Levitikus</item>
+        <item>4. Mojžišova - Numeri</item>
+        <item>5. Mojžišova - Deuteronómium</item>
+        <item>Jozua</item>
+        <item>Sudcov</item>
+        <item>Rút</item>
+        <item>1. Samuelova</item>
+        <item>2. Samuelova</item>
+        <item>1. Kráľov</item>
+        <item>2. Kráľov</item>
+        <item>1. Kroník</item>
+        <item>2. Kroník</item>
+        <item>Ezdráš</item>
+        <item>Nehemiáš</item>
+        <item>Ester</item>
+        <item>Jób</item>
+        <item>Žalmy</item>
+        <item>Príslovia</item>
+        <item>Kazateľ - Kohelet</item>
+        <item>Veľpieseň</item>
+        <item>Izaiáš</item>
+        <item>Jeremiáš</item>
+        <item>Náreky</item>
+        <item>Ezechiel</item>
+        <item>Daniel</item>
+        <item>Ozeáš</item>
+        <item>Joel</item>
+        <item>Amos</item>
+        <item>Abdiáš</item>
+        <item>Jonáš</item>
+        <item>Micheáš</item>
+        <item>Nahum</item>
+        <item>Habakuk</item>
+        <item>Sofoniáš</item>
+        <item>Aggeus</item>
+        <item>Zachariáš</item>
+        <item>Malachiáš</item>
+        <item>Matúš</item>
+        <item>Marek</item>
+        <item>Lukáš</item>
+        <item>Ján</item>
+        <item>Skutky apoštolov</item>
+        <item>Rimanom</item>
+        <item>1. Korinťanom</item>
+        <item>2. Korinťanom</item>
+        <item>Galaťanom</item>
+        <item>Efezanom</item>
+        <item>Filipanom</item>
+        <item>Kolosanom</item>
+        <item>1. Tesaloničanom</item>
+        <item>2. Tesaloničanom</item>
+        <item>1. Timotejovi</item>
+        <item>2. Timotejovi</item>
+        <item>Títovi</item>
+        <item>Filemonovi</item>
+        <item>Hebrejom</item>
+        <item>Jakubov</item>
+        <item>1. Petrov</item>
+        <item>2. Petrov</item>
+        <item>1. Jánov</item>
+        <item>2. Jánov</item>
+        <item>3. Jánov</item>
+        <item>Júdov</item>
+        <item>Zjavenie Jána</item>
+    </array>
+    <array name="books_abbreviations_array"></array>
+    <array name="total_chapters_array">
+        <item>50</item>
+		<item>40</item>
+		<item>27</item>
+		<item>36</item>
+		<item>34</item>
+		<item>24</item>
+		<item>21</item>
+		<item>4</item>
+		<item>31</item>
+		<item>24</item>
+		<item>22</item>
+		<item>25</item>
+		<item>29</item>
+		<item>36</item>
+		<item>10</item>
+		<item>13</item>
+		<item>10</item>
+		<item>42</item>
+		<item>150</item>
+		<item>31</item>
+		<item>12</item>
+		<item>8</item>
+		<item>66</item>
+		<item>52</item>
+		<item>5</item>
+		<item>48</item>
+		<item>12</item>
+		<item>14</item>
+		<item>4</item>
+		<item>9</item>
+		<item>1</item>
+		<item>4</item>
+		<item>7</item>
+		<item>3</item>
+		<item>3</item>
+		<item>3</item>
+		<item>2</item>
+		<item>14</item>
+		<item>3</item>
+		<item>28</item>
+		<item>16</item>
+		<item>24</item>
+		<item>21</item>
+		<item>28</item>
+		<item>16</item>
+		<item>16</item>
+		<item>13</item>
+		<item>6</item>
+		<item>6</item>
+		<item>4</item>
+		<item>4</item>
+		<item>5</item>
+		<item>3</item>
+		<item>6</item>
+		<item>4</item>
+		<item>3</item>
+		<item>1</item>
+		<item>13</item>
+		<item>5</item>
+		<item>5</item>
+		<item>3</item>
+		<item>5</item>
+		<item>1</item>
+		<item>1</item>
+		<item>1</item>
+		<item>22</item>
+    </array>
+
+</resources>

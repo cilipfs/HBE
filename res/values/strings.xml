@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">HBE</string>
+    <string name="title_bible">Biblia</string>
+    <string name="subtitle_bible">Slovenský Ekumenický Preklad</string>
+    <string name="button_pick">Otvoriť</string>
+    <string name="button_chapter">kapitola</string>
+    <string name="button_book">kniha</string>
+    <string name="pick_activity_option">Späť na Výber</string>
+    <string name="exit_option">Koniec</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_scripture">HBE</string>
+    <string name="title_activity_finishing">FinishingActivity</string>
+    <string name="the_beginning_text">Začiatok</string>
+    <string name="the_end_text">Koniec</string>
+    <string name="descrition_back">Pre ukončenie aplikácie stlačte \"Späť\"</string>
+
+</resources>

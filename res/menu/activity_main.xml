@@ -1,0 +1,9 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+	
+    <!--  
+    <item android:id="@+id/exit"
+          android:title="@string/exit_option"
+          android:showAsAction="never" />
+          -->
+
+</menu>
