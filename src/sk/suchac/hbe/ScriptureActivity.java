@@ -31,19 +31,6 @@ public class ScriptureActivity extends Activity {
 	Button buttonPrevious;
 	Button buttonNext;
 	
-//	public final static String INTENT_PICKED = "sk.suchac.hbe.PICKED";
-//	// index 0 -> book, index 1 -> chapter
-//	ArrayList<Integer> pickedList = new ArrayList<Integer>();
-//	
-//	public final static String INTENT_TURNED = "sk.suchac.hbe.TURNED";
-//	// 0 -> turnedBook, 1 -> turnedChapter
-//	ArrayList<Integer> turnedList = new ArrayList<Integer>();
-//	
-//	// index 0 -> book, index 1 -> chapter
-//	ArrayList<Integer> previousList = new ArrayList<Integer>();
-//	// index 0 -> book, index 1 -> chapter
-//	ArrayList<Integer> nextList = new ArrayList<Integer>();
-	
 	public final static String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
 	ScripturePosition scriptPosition = new ScripturePosition();
 	
@@ -62,22 +49,6 @@ public class ScriptureActivity extends Activity {
 		
 		buttonPrevious = (Button) findViewById(R.id.button_previous);
 		buttonNext = (Button) findViewById(R.id.button_next);
-		
-//		Intent intent = getIntent();
-//		ArrayList<Integer> receivedPickedList = intent.getIntegerArrayListExtra(MainActivity.INTENT_PICKED);
-//		if (receivedPickedList != null) {
-//			pickedList = intent.getIntegerArrayListExtra(MainActivity.INTENT_PICKED);
-//			int pickedBook = pickedList.get(0);
-//			int pickedChapter = pickedList.get(1);
-//			
-//			turnedList.add(pickedBook);
-//			turnedList.add(pickedChapter);
-//			
-//			displayScriptureText(pickedBook, pickedChapter);
-//		} else {
-//			turnedList = intent.getIntegerArrayListExtra(ScriptureActivity.INTENT_TURNED);
-//			displayScriptureText(turnedList.get(0), turnedList.get(1));
-//		}
 		
 		Intent intent = getIntent();
 		scriptPosition = (ScripturePosition) intent.getSerializableExtra(MainActivity.INTENT_SCRIPTURE_POSITION);
@@ -143,52 +114,36 @@ public class ScriptureActivity extends Activity {
 	}
 	
 	private void calculatePreviousChapter() {
-//		int actualBook = turnedList.get(0);
-//		int actualChapter = turnedList.get(1);
 		int actualBook = scriptPosition.getBook();
 		int actualChapter = scriptPosition.getChapter();
 		
 		if (actualChapter == 0) {
 			if (actualBook == 0) {
-//				previousList.add(-1);
-//				previousList.add(-1);
 				scriptPrevious.setBook(-1);
 				scriptPrevious.setChapter(-1);
 			} else {
-//				previousList.add(actualBook - 1);
-//				previousList.add(getTotalChaptersNumber(actualBook - 1) - 1);
 				scriptPrevious.setBook(actualBook - 1);
 				scriptPrevious.setChapter(getTotalChaptersNumber(actualBook - 1) - 1);
 			}
 		} else {
-//			previousList.add(actualBook);
-//			previousList.add(actualChapter - 1);
 			scriptPrevious.setBook(actualBook);
 			scriptPrevious.setChapter(actualChapter - 1);
 		}
 	}
 
 	private void calculateNextChapter() {
-//		int actualBook = turnedList.get(0);
-//		int actualChapter = turnedList.get(1);
 		int actualBook = scriptPosition.getBook();
 		int actualChapter = scriptPosition.getChapter();
 		
 		if (actualChapter == getTotalChaptersNumber(actualBook) - 1) {
 			if (actualBook == TOTAL_BOOKS_NUMBER - 1) {
-//				nextList.add(-1);
-//				nextList.add(-1);
 				scriptNext.setBook(-1);
 				scriptNext.setChapter(-1);
 			} else {
-//				nextList.add(actualBook + 1);
-//				nextList.add(0);
 				scriptNext.setBook(actualBook + 1);
 				scriptNext.setChapter(0);
 			}
 		} else {
-//			nextList.add(actualBook);
-//			nextList.add(actualChapter + 1);
 			scriptNext.setBook(actualBook);
 			scriptNext.setChapter(actualChapter + 1);
 		}
@@ -196,42 +151,32 @@ public class ScriptureActivity extends Activity {
 	
 	private void setPreviousAndNextButtonText() {
 		if (scriptPrevious.getBook() == -1) {
-//		if (previousList.get(0) == -1) {
 			buttonPrevious.setEnabled(false);
 		} else {
-//			buttonPrevious.setText("< " + getBookName(previousList.get(0)) + " " + String.valueOf(previousList.get(1) + 1));
 			buttonPrevious.setText("< " + getBookName(scriptPrevious.getBook()) + " " + String.valueOf(scriptPrevious.getChapter() + 1));
 		}
 		
 		if (scriptNext.getBook() == -1) {
-//		if (nextList.get(0) == -1) {
 			buttonNext.setEnabled(false);
 		} else {
-//			buttonNext.setText(getBookName(nextList.get(0)) + " " + String.valueOf(nextList.get(1) + 1) + " >");
 			buttonNext.setText(getBookName(scriptNext.getBook()) + " " + String.valueOf(scriptNext.getChapter() + 1) + " >");
 		}
 	}
 
 	// onClick for buttonNext
 	public void turnToNextChapter(View view) {
-//		turnedList.set(0, nextList.get(0));
-//		turnedList.set(1, nextList.get(1));
 		scriptPosition.setBook(scriptNext.getBook());
 		scriptPosition.setChapter(scriptNext.getChapter());
 		Intent intent = new Intent(this, ScriptureActivity.class);
-//	    intent.putExtra(INTENT_TURNED, turnedList);
 	    intent.putExtra(INTENT_SCRIPTURE_POSITION, scriptPosition);
 	    startActivity(intent);
 	}
 	
 	// onClick for buttonPrevious
 	public void turnToPreviousChapter(View view) {
-//		turnedList.set(0, previousList.get(0));
-//		turnedList.set(1, previousList.get(1));
 		scriptPosition.setBook(scriptPrevious.getBook());
 		scriptPosition.setChapter(scriptPrevious.getChapter());
 		Intent intent = new Intent(this, ScriptureActivity.class);
-//	    intent.putExtra(INTENT_TURNED, turnedList);
 		intent.putExtra(INTENT_SCRIPTURE_POSITION, scriptPosition);
 	    startActivity(intent);
 	}

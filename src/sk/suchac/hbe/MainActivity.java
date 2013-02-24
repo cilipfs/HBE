@@ -25,9 +25,7 @@ public class MainActivity extends Activity {
 	Button buttonChapter;
 	Button buttonPick;
 	
-//	public final static String INTENT_PICKED = "sk.suchac.hbe.PICKED";
 	public final static String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
-//	ArrayList<Integer> pickedList = new ArrayList<Integer>();	// index 0 -> book, index 1 -> chapter
 	ScripturePosition picked = new ScripturePosition();
 
     @Override
@@ -37,8 +35,6 @@ public class MainActivity extends Activity {
         thisActivity = this;
         initializeElements();
         
-//        pickedList.add(-1);
-//        pickedList.add(-1);
         picked.setBook(-1);
         picked.setChapter(-1);
         buttonChapter.setEnabled(false);
@@ -102,21 +98,16 @@ public class MainActivity extends Activity {
 	// onClick for buttonPick
 	public void showPickedScripture(View view) {
 		Intent intent = new Intent(this, ScriptureActivity.class);
-//	    intent.putExtra(INTENT_PICKED, pickedList);
 	    intent.putExtra(INTENT_SCRIPTURE_POSITION, picked);
 	    startActivity(intent);
 	}
 	
 	private void setPickedBook(int which) {
-//		pickedList.set(0, which);
-//		buttonBook.setText(getButtonBookText(pickedList.get(0)));
 		picked.setBook(which);
 		buttonBook.setText(getButtonBookText(which));
 	}
 	
 	private void setPickedChapter(int chapterIndex) {
-//		pickedList.set(1, chapterIndex);
-//		buttonChapter.setText(String.valueOf(pickedList.get(1) + 1));
 		picked.setChapter(chapterIndex);
 		buttonChapter.setText(String.valueOf(chapterIndex + 1));
 		buttonChapter.setEnabled(true);
@@ -141,7 +132,6 @@ public class MainActivity extends Activity {
 	
 	private void buildChaptersDialog() {
 		AlertDialog.Builder builder2 = new AlertDialog.Builder(thisActivity);
-//        String chapters[] = getChaptersForBook(pickedList.get(0));
         String chapters[] = getChaptersForBook(picked.getBook());
         builder2.setItems(chapters, new DialogInterface.OnClickListener() {
                public void onClick(DialogInterface dialog, int which) {
