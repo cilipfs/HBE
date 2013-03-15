@@ -69,7 +69,74 @@
         <item>Júdov</item>
         <item>Zjavenie Jána</item>
     </array>
-    <array name="books_abbreviations_array"></array>
+    <array name="books_abbreviations_array">
+        <item>1M-Gn</item>
+        <item>2M-Ex</item>
+        <item>3M-Lv</item>
+        <item>4M-Nm</item>
+        <item>5M-Dt</item>
+        <item>Joz</item>
+        <item>Sdc</item>
+        <item>Rút</item>
+        <item>1Sam</item>
+        <item>2Sam</item>
+        <item>1Kr</item>
+        <item>2Kr</item>
+        <item>1Krn</item>
+        <item>2Krn</item>
+        <item>Ezd</item>
+        <item>Neh</item>
+        <item>Est</item>
+        <item>Jób</item>
+        <item>Ž</item>
+        <item>Prís</item>
+        <item>Kaz</item>
+        <item>Pies</item>
+        <item>Iz</item>
+        <item>Jer</item>
+        <item>Nár</item>
+        <item>Ez</item>
+        <item>Dan</item>
+        <item>Oz</item>
+        <item>Joel</item>
+        <item>Am</item>
+        <item>Abd</item>
+        <item>Jon</item>
+        <item>Mich</item>
+        <item>Nah</item>
+        <item>Hab</item>
+        <item>Sof</item>
+        <item>Ag</item>
+        <item>Zach</item>
+        <item>Mal</item>
+        <item>Mt</item>
+        <item>Mk</item>
+        <item>Lk</item>
+        <item>Jn</item>
+        <item>Sk</item>
+        <item>Rim</item>
+        <item>1Kor</item>
+        <item>2Kor</item>
+        <item>Gal</item>
+        <item>Ef</item>
+        <item>Flp</item>
+        <item>Kol</item>
+        <item>1Tes</item>
+        <item>2Tes</item>
+        <item>1Tim</item>
+        <item>2Tim</item>
+        <item>Tít</item>
+        <item>Flm</item>
+        <item>Hebr</item>
+        <item>Jak</item>
+        <item>1Pt</item>
+        <item>2Pt</item>
+        <item>1Jn</item>
+        <item>2Jn</item>
+        <item>3Jn</item>
+        <item>Júd</item>
+        <item>Zjv</item>
+    </array>
     <array name="total_chapters_array">
         <item>50</item>
 		<item>40</item>

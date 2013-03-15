@@ -105,7 +105,7 @@ public class ScriptureActivity extends Activity {
 		}
 		
 		textField.append(Html.fromHtml(handler.getHtmlOutput()));
-		this.setTitle(handler.getActualBookTitleAndChapter());
+		this.setTitle(handler.getActualBookAbbreviationAndChapter());
 	}
 	
 	private void calculatePreviousAndNextChapter() {
@@ -153,13 +153,13 @@ public class ScriptureActivity extends Activity {
 		if (scriptPrevious.getBook() == -1) {
 			buttonPrevious.setEnabled(false);
 		} else {
-			buttonPrevious.setText("< " + getBookName(scriptPrevious.getBook()) + " " + String.valueOf(scriptPrevious.getChapter() + 1));
+			buttonPrevious.setText("< " + getBookAbbreviation(scriptPrevious.getBook()) + " " + String.valueOf(scriptPrevious.getChapter() + 1));
 		}
 		
 		if (scriptNext.getBook() == -1) {
 			buttonNext.setEnabled(false);
 		} else {
-			buttonNext.setText(getBookName(scriptNext.getBook()) + " " + String.valueOf(scriptNext.getChapter() + 1) + " >");
+			buttonNext.setText(getBookAbbreviation(scriptNext.getBook()) + " " + String.valueOf(scriptNext.getChapter() + 1) + " >");
 		}
 	}
 
@@ -206,6 +206,12 @@ public class ScriptureActivity extends Activity {
 		Resources res = getResources();
  	   	String[] books = res.getStringArray(R.array.books_array);
  	   	return books[bookId];
+	}
+	
+	private String getBookAbbreviation(int bookId) {
+		Resources res = getResources();
+ 	   	String[] bookAbbrevs = res.getStringArray(R.array.books_abbreviations_array);
+ 	   	return bookAbbrevs[bookId];
 	}
 
 }

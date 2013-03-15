@@ -10,6 +10,7 @@ public class BibleXmlHandler extends DefaultHandler {
 	
 	private int chapterId = -1;
 	private String bookTitle = "";
+	private String bookAbbreviation = "";
 	
 	private boolean insideChapter = false;
 	private boolean insideVerse = false;
@@ -25,6 +26,7 @@ public class BibleXmlHandler extends DefaultHandler {
 		
 		if ("Book".equals(localName)) {
 			bookTitle = atts.getValue("title");
+			bookAbbreviation = atts.getValue("abbreviation");
 			htmlOutput.append(HtmlHelper.bold(bookTitle)).append(" ").append(HtmlHelper.bold(chapterId + 1));
 			htmlOutput.append(HtmlHelper.getSkipLine());
 			return;
@@ -93,6 +95,10 @@ public class BibleXmlHandler extends DefaultHandler {
 	
 	public String getActualBookTitleAndChapter() {
 		return bookTitle + " " + (chapterId + 1);
+	}
+	
+	public String getActualBookAbbreviationAndChapter() {
+		return bookAbbreviation + " " + (chapterId + 1);
 	}
 	
 }
