@@ -80,8 +80,8 @@
         <item>Rút</item>
         <item>1Sam</item>
         <item>2Sam</item>
-        <item>1Kr</item>
-        <item>2Kr</item>
+        <item>1Krľ</item>
+        <item>2Krľ</item>
         <item>1Krn</item>
         <item>2Krn</item>
         <item>Ezd</item>
@@ -90,8 +90,8 @@
         <item>Jób</item>
         <item>Ž</item>
         <item>Prís</item>
-        <item>Kaz</item>
-        <item>Pies</item>
+        <item>Koh</item>
+        <item>Vľp</item>
         <item>Iz</item>
         <item>Jer</item>
         <item>Nár</item>
@@ -117,7 +117,7 @@
         <item>Rim</item>
         <item>1Kor</item>
         <item>2Kor</item>
-        <item>Gal</item>
+        <item>Ga</item>
         <item>Ef</item>
         <item>Flp</item>
         <item>Kol</item>
@@ -127,15 +127,15 @@
         <item>2Tim</item>
         <item>Tít</item>
         <item>Flm</item>
-        <item>Hebr</item>
-        <item>Jak</item>
+        <item>Heb</item>
+        <item>Jk</item>
         <item>1Pt</item>
         <item>2Pt</item>
         <item>1Jn</item>
         <item>2Jn</item>
         <item>3Jn</item>
         <item>Júd</item>
-        <item>Zjv</item>
+        <item>Zj</item>
     </array>
     <array name="total_chapters_array">
         <item>50</item>
