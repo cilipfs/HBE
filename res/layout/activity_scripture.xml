@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scripture_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ScriptureActivity" >
@@ -42,6 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="50"
+                android:minHeight="36dp"
                 android:onClick="turnToPreviousChapter"
                 android:text="@string/the_beginning_text" />
 
@@ -50,6 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="50"
+                android:minHeight="36dp"
                 android:onClick="turnToNextChapter"
                 android:text="@string/the_end_text" />
 

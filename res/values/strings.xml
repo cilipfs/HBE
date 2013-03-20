@@ -15,5 +15,11 @@
     <string name="the_beginning_text">Začiatok</string>
     <string name="the_end_text">Koniec</string>
     <string name="descrition_back">Pre ukončenie aplikácie stlačte \"Späť\"</string>
+    <string name="night_day_mode_title">Nočný/denný režim</string>
+    
+    <color name="night_back">#222222</color>
+    <color name="night_text">#C0C0C0</color>
+    <color name="day_back">#FFFFFF</color>
+    <color name="day_text">#000000</color>
 
 </resources>

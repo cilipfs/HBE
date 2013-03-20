@@ -15,6 +15,7 @@ import sk.suchac.hbe.objects.ScripturePosition;
 import sk.suchac.hbe.parser.BibleXmlHandler;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -30,6 +31,9 @@ public class ScriptureActivity extends Activity {
 	TextView textField;
 	Button buttonPrevious;
 	Button buttonNext;
+	
+	public static final String PREFS = "HbePrefsFile";
+	private static boolean nightMode;
 	
 	public final static String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
 	ScripturePosition scriptPosition = new ScripturePosition();
@@ -57,6 +61,13 @@ public class ScriptureActivity extends Activity {
 		calculatePreviousAndNextChapter();
 		setPreviousAndNextButtonText();
 		
+		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+        nightMode = settings.getBoolean("nightMode", false);
+        if (nightMode) {
+        	findViewById(R.id.scripture_layout).setBackgroundColor(getResources().getColor(R.color.night_back));
+        	((TextView) findViewById(R.id.textView)).setTextColor(getResources().getColor(R.color.night_text));
+        }
+		
 	}
 
 	@Override
@@ -65,10 +76,27 @@ public class ScriptureActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_scripture, menu);
 		return true;
 	}
+	
+	@Override
+    protected void onStart() {
+    	super.onStart();
+    	SharedPreferences settings = getSharedPreferences(PREFS, 0);
+        nightMode = settings.getBoolean("nightMode", false);
+        if (nightMode) {
+        	findViewById(R.id.scripture_layout).setBackgroundColor(getResources().getColor(R.color.night_back));
+        	((TextView) findViewById(R.id.textView)).setTextColor(getResources().getColor(R.color.night_text));
+        } else {
+        	findViewById(R.id.scripture_layout).setBackgroundColor(getResources().getColor(R.color.day_back));
+        	((TextView) findViewById(R.id.textView)).setTextColor(getResources().getColor(R.color.day_text));
+        }
+    }
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+			case R.id.night_day_mode:
+	    		switchNightDayMode();
+	    		return true;
 			case R.id.show_pick_activity:
 				Intent intent = new Intent(this, MainActivity.class);
 			    startActivity(intent);
@@ -83,6 +111,26 @@ public class ScriptureActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	private void switchNightDayMode() {
+		if (nightMode) {
+			SharedPreferences settings = getSharedPreferences(PREFS, 0);
+		    SharedPreferences.Editor editor = settings.edit();
+		    editor.putBoolean("nightMode", false);
+		    editor.commit();
+		    nightMode = false;
+		    findViewById(R.id.scripture_layout).setBackgroundColor(getResources().getColor(R.color.day_back));
+        	((TextView) findViewById(R.id.textView)).setTextColor(getResources().getColor(R.color.day_text));
+        } else {
+        	SharedPreferences settings = getSharedPreferences(PREFS, 0);
+		    SharedPreferences.Editor editor = settings.edit();
+		    editor.putBoolean("nightMode", true);
+		    editor.commit();
+		    nightMode = true;
+		    findViewById(R.id.scripture_layout).setBackgroundColor(getResources().getColor(R.color.night_back));
+        	((TextView) findViewById(R.id.textView)).setTextColor(getResources().getColor(R.color.night_text));
+        }
+	}
+
 	private void displayScriptureText(int bookIndex, int chapterIndex) {
 		InputSource source = getInputSourceForBible(bookIndex);
 		BibleXmlHandler handler = new BibleXmlHandler(chapterIndex);

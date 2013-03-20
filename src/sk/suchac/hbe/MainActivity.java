@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.Menu;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class MainActivity extends Activity {
 	
@@ -24,6 +26,9 @@ public class MainActivity extends Activity {
 	Button buttonBook;
 	Button buttonChapter;
 	Button buttonPick;
+	
+	public static final String PREFS = "HbePrefsFile";
+	private static boolean nightMode;
 	
 	public final static String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
 	ScripturePosition picked = new ScripturePosition();
@@ -50,6 +55,16 @@ public class MainActivity extends Activity {
         	}
         });
         bookDialog = builder.create();
+        
+        SharedPreferences settings = getSharedPreferences(PREFS, 0);
+        nightMode = settings.getBoolean("nightMode", false);
+        if (nightMode) {
+        	findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.night_back));
+        	((TextView) findViewById(R.id.textView_title_bible)).setTextColor(getResources().getColor(R.color.night_text));
+        	((TextView) findViewById(R.id.textView_subtitle_bible)).setTextColor(getResources().getColor(R.color.night_text));
+        	((TextView) findViewById(R.id.textView_description_back)).setTextColor(getResources().getColor(R.color.night_text));
+        }
+
     }
 
 	@Override
@@ -58,6 +73,24 @@ public class MainActivity extends Activity {
 		MenuInflater inflater = getMenuInflater();
 	    inflater.inflate(R.menu.activity_main, menu);
         return true;
+    }
+	
+	@Override
+    protected void onStart() {
+    	super.onStart();
+    	SharedPreferences settings = getSharedPreferences(PREFS, 0);
+        nightMode = settings.getBoolean("nightMode", false);
+        if (nightMode) {
+        	findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.night_back));
+        	((TextView) findViewById(R.id.textView_title_bible)).setTextColor(getResources().getColor(R.color.night_text));
+        	((TextView) findViewById(R.id.textView_subtitle_bible)).setTextColor(getResources().getColor(R.color.night_text));
+        	((TextView) findViewById(R.id.textView_description_back)).setTextColor(getResources().getColor(R.color.night_text));
+        } else {
+        	findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.day_back));
+        	((TextView) findViewById(R.id.textView_title_bible)).setTextColor(getResources().getColor(R.color.day_text));
+        	((TextView) findViewById(R.id.textView_subtitle_bible)).setTextColor(getResources().getColor(R.color.day_text));
+        	((TextView) findViewById(R.id.textView_description_back)).setTextColor(getResources().getColor(R.color.day_text));
+        }
     }
     
 	@Override
@@ -70,11 +103,38 @@ public class MainActivity extends Activity {
 //	        	startActivity(intent);
 //	        	finish();
 //	            return true;
+	    	case R.id.night_day_mode:
+	    		switchNightDayMode();
+	    		return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
 	
+	private void switchNightDayMode() {
+		if (nightMode) {
+			SharedPreferences settings = getSharedPreferences(PREFS, 0);
+		    SharedPreferences.Editor editor = settings.edit();
+		    editor.putBoolean("nightMode", false);
+		    editor.commit();
+		    nightMode = false;
+        	findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.day_back));
+        	((TextView) findViewById(R.id.textView_title_bible)).setTextColor(getResources().getColor(R.color.day_text));
+        	((TextView) findViewById(R.id.textView_subtitle_bible)).setTextColor(getResources().getColor(R.color.day_text));
+        	((TextView) findViewById(R.id.textView_description_back)).setTextColor(getResources().getColor(R.color.day_text));
+        } else {
+        	SharedPreferences settings = getSharedPreferences(PREFS, 0);
+		    SharedPreferences.Editor editor = settings.edit();
+		    editor.putBoolean("nightMode", true);
+		    editor.commit();
+		    nightMode = true;
+        	findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.night_back));
+        	((TextView) findViewById(R.id.textView_title_bible)).setTextColor(getResources().getColor(R.color.night_text));
+        	((TextView) findViewById(R.id.textView_subtitle_bible)).setTextColor(getResources().getColor(R.color.night_text));
+        	((TextView) findViewById(R.id.textView_description_back)).setTextColor(getResources().getColor(R.color.night_text));
+        }
+	}
+
 	private void initializeElements() {
 		buttonBook = (Button) findViewById(R.id.button_book);
         buttonBook.setOnClickListener(buttonBookListener);
