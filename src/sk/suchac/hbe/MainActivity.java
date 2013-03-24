@@ -20,12 +20,15 @@ public class MainActivity extends Activity {
 	
 	MainActivity thisActivity;
 	
-	AlertDialog bookDialog;
-	AlertDialog chapterDialog;
-	
-	Button buttonBook;
-	Button buttonChapter;
-	Button buttonPick;
+	private AlertDialog bookDialog;
+	private AlertDialog chapterDialog;
+	private Button buttonBook;
+	private Button buttonChapter;
+	private Button buttonPick;
+	private View background;
+	private TextView title;
+	private TextView subtitle;
+	private TextView backDescription;
 	
 	public static final String PREFS = "HbePrefsFile";
 	private static boolean nightMode;
@@ -56,13 +59,8 @@ public class MainActivity extends Activity {
         });
         bookDialog = builder.create();
         
-        SharedPreferences settings = getSharedPreferences(PREFS, 0);
-        nightMode = settings.getBoolean("nightMode", false);
-        if (nightMode) {
-        	findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.night_back));
-        	((TextView) findViewById(R.id.textView_title_bible)).setTextColor(getResources().getColor(R.color.night_text));
-        	((TextView) findViewById(R.id.textView_subtitle_bible)).setTextColor(getResources().getColor(R.color.night_text));
-        	((TextView) findViewById(R.id.textView_description_back)).setTextColor(getResources().getColor(R.color.night_text));
+        if (isNightMode()) {
+        	applyNightMode();
         }
 
     }
@@ -78,18 +76,10 @@ public class MainActivity extends Activity {
 	@Override
     protected void onStart() {
     	super.onStart();
-    	SharedPreferences settings = getSharedPreferences(PREFS, 0);
-        nightMode = settings.getBoolean("nightMode", false);
-        if (nightMode) {
-        	findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.night_back));
-        	((TextView) findViewById(R.id.textView_title_bible)).setTextColor(getResources().getColor(R.color.night_text));
-        	((TextView) findViewById(R.id.textView_subtitle_bible)).setTextColor(getResources().getColor(R.color.night_text));
-        	((TextView) findViewById(R.id.textView_description_back)).setTextColor(getResources().getColor(R.color.night_text));
+        if (isNightMode()) {
+        	applyNightMode();
         } else {
-        	findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.day_back));
-        	((TextView) findViewById(R.id.textView_title_bible)).setTextColor(getResources().getColor(R.color.day_text));
-        	((TextView) findViewById(R.id.textView_subtitle_bible)).setTextColor(getResources().getColor(R.color.day_text));
-        	((TextView) findViewById(R.id.textView_description_back)).setTextColor(getResources().getColor(R.color.day_text));
+        	applyDayMode();
         }
     }
     
@@ -113,25 +103,11 @@ public class MainActivity extends Activity {
 	
 	private void switchNightDayMode() {
 		if (nightMode) {
-			SharedPreferences settings = getSharedPreferences(PREFS, 0);
-		    SharedPreferences.Editor editor = settings.edit();
-		    editor.putBoolean("nightMode", false);
-		    editor.commit();
-		    nightMode = false;
-        	findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.day_back));
-        	((TextView) findViewById(R.id.textView_title_bible)).setTextColor(getResources().getColor(R.color.day_text));
-        	((TextView) findViewById(R.id.textView_subtitle_bible)).setTextColor(getResources().getColor(R.color.day_text));
-        	((TextView) findViewById(R.id.textView_description_back)).setTextColor(getResources().getColor(R.color.day_text));
+			saveNightModeState(false);
+        	applyDayMode();
         } else {
-        	SharedPreferences settings = getSharedPreferences(PREFS, 0);
-		    SharedPreferences.Editor editor = settings.edit();
-		    editor.putBoolean("nightMode", true);
-		    editor.commit();
-		    nightMode = true;
-        	findViewById(R.id.main_layout).setBackgroundColor(getResources().getColor(R.color.night_back));
-        	((TextView) findViewById(R.id.textView_title_bible)).setTextColor(getResources().getColor(R.color.night_text));
-        	((TextView) findViewById(R.id.textView_subtitle_bible)).setTextColor(getResources().getColor(R.color.night_text));
-        	((TextView) findViewById(R.id.textView_description_back)).setTextColor(getResources().getColor(R.color.night_text));
+        	saveNightModeState(true);
+        	applyNightMode();
         }
 	}
 
@@ -141,6 +117,10 @@ public class MainActivity extends Activity {
         buttonChapter = (Button) findViewById(R.id.button_chapter);
         buttonChapter.setOnClickListener(buttonChapterListener);
         buttonPick = (Button) findViewById(R.id.button_pick);
+        background = findViewById(R.id.main_layout);
+    	title = (TextView) findViewById(R.id.textView_title_bible);
+    	subtitle = (TextView) findViewById(R.id.textView_subtitle_bible);
+    	backDescription = (TextView) findViewById(R.id.textView_description_back);
 	}
 	
 	private OnClickListener buttonBookListener = new OnClickListener() {
@@ -199,6 +179,34 @@ public class MainActivity extends Activity {
                }
         });
         chapterDialog = builder2.create();
+	}
+	
+	private boolean isNightMode() {
+		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+        nightMode = settings.getBoolean("nightMode", false);
+		return nightMode;
+	}
+	
+	private void applyNightMode() {
+		background.setBackgroundColor(getResources().getColor(R.color.night_back));
+    	title.setTextColor(getResources().getColor(R.color.night_text));
+    	subtitle.setTextColor(getResources().getColor(R.color.night_text));
+    	backDescription.setTextColor(getResources().getColor(R.color.night_text));
+	}
+	
+	private void applyDayMode() {
+		background.setBackgroundColor(getResources().getColor(R.color.day_back));
+    	title.setTextColor(getResources().getColor(R.color.day_text));
+    	subtitle.setTextColor(getResources().getColor(R.color.day_text));
+    	backDescription.setTextColor(getResources().getColor(R.color.day_text));
+	}
+	
+	private void saveNightModeState(boolean night) {
+		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putBoolean("nightMode", night);
+	    editor.commit();
+	    nightMode = night;
 	}
 	
 }

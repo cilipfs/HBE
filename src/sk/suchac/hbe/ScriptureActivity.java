@@ -28,9 +28,10 @@ import android.widget.TextView;
 
 public class ScriptureActivity extends Activity {
 	
-	TextView textField;
-	Button buttonPrevious;
-	Button buttonNext;
+	private TextView textField;
+	private Button buttonPrevious;
+	private Button buttonNext;
+	private View background;
 	
 	public static final String PREFS = "HbePrefsFile";
 	private static boolean nightMode;
@@ -48,6 +49,7 @@ public class ScriptureActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scripture);
 		
+		background = findViewById(R.id.scripture_layout);
 		textField = (TextView) findViewById(R.id.textView);
 		textField.setText("");
 		
@@ -61,11 +63,8 @@ public class ScriptureActivity extends Activity {
 		calculatePreviousAndNextChapter();
 		setPreviousAndNextButtonText();
 		
-		SharedPreferences settings = getSharedPreferences(PREFS, 0);
-        nightMode = settings.getBoolean("nightMode", false);
-        if (nightMode) {
-        	findViewById(R.id.scripture_layout).setBackgroundColor(getResources().getColor(R.color.night_back));
-        	((TextView) findViewById(R.id.textView)).setTextColor(getResources().getColor(R.color.night_text));
+        if (isNightMode()) {
+        	applyNightMode();
         }
 		
 	}
@@ -80,14 +79,10 @@ public class ScriptureActivity extends Activity {
 	@Override
     protected void onStart() {
     	super.onStart();
-    	SharedPreferences settings = getSharedPreferences(PREFS, 0);
-        nightMode = settings.getBoolean("nightMode", false);
-        if (nightMode) {
-        	findViewById(R.id.scripture_layout).setBackgroundColor(getResources().getColor(R.color.night_back));
-        	((TextView) findViewById(R.id.textView)).setTextColor(getResources().getColor(R.color.night_text));
+        if (isNightMode()) {
+        	applyNightMode();
         } else {
-        	findViewById(R.id.scripture_layout).setBackgroundColor(getResources().getColor(R.color.day_back));
-        	((TextView) findViewById(R.id.textView)).setTextColor(getResources().getColor(R.color.day_text));
+        	applyDayMode();
         }
     }
 
@@ -113,21 +108,11 @@ public class ScriptureActivity extends Activity {
 	
 	private void switchNightDayMode() {
 		if (nightMode) {
-			SharedPreferences settings = getSharedPreferences(PREFS, 0);
-		    SharedPreferences.Editor editor = settings.edit();
-		    editor.putBoolean("nightMode", false);
-		    editor.commit();
-		    nightMode = false;
-		    findViewById(R.id.scripture_layout).setBackgroundColor(getResources().getColor(R.color.day_back));
-        	((TextView) findViewById(R.id.textView)).setTextColor(getResources().getColor(R.color.day_text));
+			saveNightModeState(false);
+		    applyDayMode();
         } else {
-        	SharedPreferences settings = getSharedPreferences(PREFS, 0);
-		    SharedPreferences.Editor editor = settings.edit();
-		    editor.putBoolean("nightMode", true);
-		    editor.commit();
-		    nightMode = true;
-		    findViewById(R.id.scripture_layout).setBackgroundColor(getResources().getColor(R.color.night_back));
-        	((TextView) findViewById(R.id.textView)).setTextColor(getResources().getColor(R.color.night_text));
+        	saveNightModeState(true);
+		    applyNightMode();
         }
 	}
 
@@ -260,6 +245,30 @@ public class ScriptureActivity extends Activity {
 		Resources res = getResources();
  	   	String[] bookAbbrevs = res.getStringArray(R.array.books_abbreviations_array);
  	   	return bookAbbrevs[bookId];
+	}
+	
+	private boolean isNightMode() {
+		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+        nightMode = settings.getBoolean("nightMode", false);
+		return nightMode;
+	}
+	
+	private void applyNightMode() {
+		background.setBackgroundColor(getResources().getColor(R.color.night_back));
+    	textField.setTextColor(getResources().getColor(R.color.night_text));
+	}
+	
+	private void applyDayMode() {
+		background.setBackgroundColor(getResources().getColor(R.color.day_back));
+    	textField.setTextColor(getResources().getColor(R.color.day_text));
+	}
+	
+	private void saveNightModeState(boolean night) {
+		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putBoolean("nightMode", night);
+	    editor.commit();
+	    nightMode = night;
 	}
 
 }
