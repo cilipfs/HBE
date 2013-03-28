@@ -1,5 +1,8 @@
 package sk.suchac.hbe;
 
+import java.io.File;
+import java.io.IOException;
+
 import sk.suchac.hbe.objects.ScripturePosition;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -8,6 +11,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -58,10 +62,6 @@ public class MainActivity extends Activity {
         	}
         });
         bookDialog = builder.create();
-        
-        if (isNightMode()) {
-        	applyNightMode();
-        }
 
     }
 
@@ -96,6 +96,10 @@ public class MainActivity extends Activity {
 	    	case R.id.night_day_mode:
 	    		switchNightDayMode();
 	    		return true;
+	    	case R.id.show_bookmarks:
+				Intent intent = new Intent(this, BookmarkActivity.class);
+			    startActivity(intent);
+	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }

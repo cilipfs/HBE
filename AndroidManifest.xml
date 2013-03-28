@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sk.suchac.hbe"
-    android:versionCode="0122"
+    android:versionCode="0123"
     android:versionName="1.3" >
 
     <uses-sdk
@@ -33,6 +33,10 @@
         <activity
             android:name="sk.suchac.hbe.FinishingActivity"
             android:label="@string/title_activity_finishing" >
+        </activity>
+        <activity
+            android:name="sk.suchac.hbe.BookmarkActivity"
+            android:label="@string/title_activity_bookmark" >
         </activity>
     </application>
 

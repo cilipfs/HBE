@@ -62,11 +62,7 @@ public class ScriptureActivity extends Activity {
 		
 		calculatePreviousAndNextChapter();
 		setPreviousAndNextButtonText();
-		
-        if (isNightMode()) {
-        	applyNightMode();
-        }
-		
+        
 	}
 
 	@Override
@@ -95,6 +91,10 @@ public class ScriptureActivity extends Activity {
 			case R.id.show_pick_activity:
 				Intent intent = new Intent(this, MainActivity.class);
 			    startActivity(intent);
+	            return true;
+			case R.id.show_bookmarks:
+				Intent intent2 = new Intent(this, BookmarkActivity.class);
+			    startActivity(intent2);
 	            return true;
 //			case R.id.exit:
 //				Intent intent2 = new Intent(this, FinishingActivity.class);
