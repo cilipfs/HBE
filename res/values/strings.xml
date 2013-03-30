@@ -22,8 +22,8 @@
     <color name="day_back">#FFFFFF</color>
     <color name="day_text">#000000</color>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="title_activity_bookmark">BookmarkActivity</string>
+    <string name="title_activity_bookmark">Záložky</string>
     <string name="bookmark_activity_option">Záložky</string>
+    <string name="button_add_bookmark">Pridať záložku</string>
 
 </resources>
