@@ -1,5 +1,9 @@
 package sk.suchac.hbe.objects;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Bookmark {
 	
 	private long timestamp;
@@ -8,11 +12,23 @@ public class Bookmark {
 	
 	public Bookmark() {}
 	
+	public Bookmark(long timestamp, int bookId, int chapterId) {
+		this.timestamp = timestamp;
+		this.bookId = bookId;
+		this.chapterId = chapterId;
+	}
+	
 	public Bookmark(String bookmarkStr) {
 		String[] bm = bookmarkStr.split(",");
 		this.timestamp = Long.parseLong(bm[0]);
 		this.bookId = Integer.parseInt(bm[1]);
 		this.chapterId = Integer.parseInt(bm[2]);
+	}
+	
+	public String getDateString() {
+		Date date = new Date(timestamp);
+		DateFormat df = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+		return df.format(date);
 	}
 	
 	public long getTimestamp() {

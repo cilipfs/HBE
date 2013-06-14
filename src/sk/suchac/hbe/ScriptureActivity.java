@@ -94,6 +94,7 @@ public class ScriptureActivity extends Activity {
 	            return true;
 			case R.id.show_bookmarks:
 				Intent intent2 = new Intent(this, BookmarkActivity.class);
+				intent2.putExtra(INTENT_SCRIPTURE_POSITION, scriptPosition);
 			    startActivity(intent2);
 	            return true;
 //			case R.id.exit:

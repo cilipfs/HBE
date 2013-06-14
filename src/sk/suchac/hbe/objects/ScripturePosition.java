@@ -6,6 +6,13 @@ public class ScripturePosition implements Serializable {
 	
 	private static final long serialVersionUID = -7066276067582111945L;
 	
+	public ScripturePosition() {}
+	
+	public ScripturePosition(int bookId, int chapterId) {
+		this.book = bookId;
+		this.chapter = chapterId;
+	}
+	
 	private int book;
 	private int chapter;
 	

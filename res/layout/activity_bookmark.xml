@@ -13,25 +13,39 @@
             android:id="@+id/bookmark_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:padding="4dp" >
 
-            <Button
-                android:id="@+id/button_add_bookmark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:text="@string/button_add_bookmark" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/button_clear_bookmarks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/button_clear_bookmarks" />
+
+                <Button
+                    android:id="@+id/button_add_bookmark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="50"
+                    android:text="@string/button_add_bookmark" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/bookmark_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:padding="2dp" />
 
             <TableLayout
                 android:id="@+id/bookmark_table"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:padding="2dp" >
 
             </TableLayout>
 

@@ -24,6 +24,12 @@
 
     <string name="title_activity_bookmark">Záložky</string>
     <string name="bookmark_activity_option">Záložky</string>
-    <string name="button_add_bookmark">Pridať záložku</string>
+    <string name="button_add_bookmark">Pridať</string>
+    <string name="button_clear_bookmarks">Vymazať všetky</string>
+    
+    <string name="yes">Áno</string>
+    <string name="no">Nie</string>
+    
+    <string name="dialog_clear_bookmarks_msg">Vymazať všetky záložky?</string>
 
 </resources>
