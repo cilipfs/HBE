@@ -175,26 +175,24 @@ public class BookmarkActivity extends Activity {
 	    	tr.addView(text);
 	    	
 	    	Button btnActualize = new Button(thisActivity);
-	    	btnActualize.setText("A");
+	    	btnActualize.setText(R.string.button_bookmark_actualize);
 	    	btnActualize.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 50));
 	    	if (!enabledEditing) {
 	    		btnActualize.setEnabled(false);
 	    	}
 	    	btnActualize.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					actualizeBookmark(bookmark.getTimestamp());
-					displayBookmarks();
+					createDialogActualizeBookmark(bookmark).show();
 				}
 			});
 	    	tr.addView(btnActualize);
 	    	
 	    	Button btnDelete = new Button(thisActivity);
-	    	btnDelete.setText("X");
+	    	btnDelete.setText(R.string.button_bookmark_delete);
 	    	btnDelete.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 50));
 	    	btnDelete.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					bookmarkTable.removeView(tr);
-					deleteBookmark(bookmark.getTimestamp());
+					createDialogDeleteBookmark(tr, bookmark).show();
 				}
 			});
 	    	tr.addView(btnDelete);
@@ -233,6 +231,64 @@ public class BookmarkActivity extends Activity {
 	    SharedPreferences.Editor editor = settings.edit();
 	    editor.remove(String.valueOf(timestamp));
 	    editor.commit();
+	}
+	
+	private AlertDialog createDialogActualizeBookmark(final Bookmark bookmark) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		StringBuilder msg = new StringBuilder();
+		Resources res = getResources();
+		msg.append(res.getString(R.string.dialog_actualize_bookmark_msg));
+		msg.append("\n" + res.getString(R.string.dialog_bookmark_msg_created));
+		msg.append(" " + bookmark.getDateString());
+		msg.append("\n" + res.getString(R.string.dialog_bookmark_msg_from));
+		msg.append(" " + getBookAbbreviation(bookmark.getBookId()));
+		msg.append(" " + (bookmark.getChapterId() + 1));
+		msg.append(" " + res.getString(R.string.dialog_bookmark_msg_to));
+		msg.append(" " + getBookAbbreviation(scriptPosition.getBook()));
+		msg.append(" " + (scriptPosition.getChapter() + 1));
+		
+		builder.setMessage(msg.toString());
+		builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				actualizeBookmark(bookmark.getTimestamp());
+				displayBookmarks();
+			}
+		});
+		builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		return builder.create();
+	}
+	
+	private AlertDialog createDialogDeleteBookmark(final TableRow tableRow, final Bookmark bookmark) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		StringBuilder msg = new StringBuilder();
+		Resources res = getResources();
+		msg.append(res.getString(R.string.dialog_delete_bookmark_msg));
+		msg.append("\n" + getBookAbbreviation(bookmark.getBookId()));
+		msg.append(" " + (bookmark.getChapterId() + 1));
+		msg.append("\n" + res.getString(R.string.dialog_bookmark_msg_created));
+		msg.append(" " + bookmark.getDateString());
+		
+		builder.setMessage(msg.toString());
+		builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				bookmarkTable.removeView(tableRow);
+				deleteBookmark(bookmark.getTimestamp());
+			}
+		});
+		builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		return builder.create();
 	}
 
 }
