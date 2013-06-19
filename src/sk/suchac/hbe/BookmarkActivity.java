@@ -22,62 +22,42 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableLayout.LayoutParams;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class BookmarkActivity extends Activity {
 	
 	private BookmarkActivity thisActivity = this;
-	private LinearLayout bookmarkContainer;
+	private View background;
+	//private LinearLayout bookmarkContainer;
 	private Button buttonAddBookmark;
 	private Button buttonClearBookmarks;
 	private TableLayout bookmarkTable;
-	
-	private AlertDialog dialogClearBookmarks;
-	
-	private TextView tv;
+	//private TextView tv;
 	
 	ScripturePosition scriptPosition = new ScripturePosition();
 	
 	private boolean enabledEditing;
 	
-	public final static String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
+	private static Resources resources;
+	
+	public static final String PREFS = "HbePrefsFile";
+	private static boolean nightMode;
+	
+	public static final String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
 	public static final String INT_STORE_PREFS = "HbeBookmarkPrefs";
+	public static final int MAX_BOOKMARKS = 20;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_bookmark);
+		resources = getResources();
 		
-		bookmarkContainer = (LinearLayout) findViewById(R.id.bookmark_container);
-		
-		buttonAddBookmark = (Button) findViewById(R.id.button_add_bookmark);
-		buttonAddBookmark.setOnClickListener(buttonAddBookmarkListener);
-		
-		buttonClearBookmarks = (Button) findViewById(R.id.button_clear_bookmarks);
-		buttonClearBookmarks.setOnClickListener(buttonClearBookmarksListener);
-		AlertDialog.Builder dialogClearBookmarksBuilder = new AlertDialog.Builder(this);
-		dialogClearBookmarksBuilder.setMessage(R.string.dialog_clear_bookmarks_msg);
-		dialogClearBookmarksBuilder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				clearBookmarks();
-				displayBookmarks();
-			}
-		});
-		dialogClearBookmarksBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-			}
-		});
-		dialogClearBookmarks = dialogClearBookmarksBuilder.create();
-		
-		tv = (TextView) findViewById(R.id.bookmark_textView);
-		bookmarkTable = (TableLayout) findViewById(R.id.bookmark_table);
+		initializeElements();
 		
 		Intent intent = getIntent();
 		scriptPosition = (ScripturePosition) intent.getSerializableExtra(ScriptureActivity.INTENT_SCRIPTURE_POSITION);
@@ -88,7 +68,6 @@ public class BookmarkActivity extends Activity {
 			enabledEditing = true;
 		}
 		
-		displayBookmarks();
 	}
 
 	@Override
@@ -101,6 +80,9 @@ public class BookmarkActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+			case R.id.night_day_mode:
+	    		switchNightDayMode();
+	    		return true;
 			case R.id.show_pick_activity:
 				Intent intent = new Intent(this, MainActivity.class);
 			    startActivity(intent);
@@ -112,17 +94,59 @@ public class BookmarkActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
+		displayBookmarks();
+		
+        if (isNightMode()) {
+        	applyNightMode();
+        } else {
+        	applyDayMode();
+        }
+	}
+	
+	private void switchNightDayMode() {
+		if (nightMode) {
+			saveNightModeState(false);
+        	applyDayMode();
+        } else {
+        	saveNightModeState(true);
+        	applyNightMode();
+        }
+	}
+	
+	private void initializeElements() {
+		background = findViewById(R.id.bookmark_layout);
+		//bookmarkContainer = (LinearLayout) findViewById(R.id.bookmark_container);
+		
+		buttonAddBookmark = (Button) findViewById(R.id.button_add_bookmark);
+		buttonAddBookmark.setOnClickListener(buttonAddBookmarkListener);
+		
+		buttonClearBookmarks = (Button) findViewById(R.id.button_clear_bookmarks);
+		buttonClearBookmarks.setOnClickListener(buttonClearBookmarksListener);
+		
+		//tv = (TextView) findViewById(R.id.bookmark_textView);
+		bookmarkTable = (TableLayout) findViewById(R.id.bookmark_table);
 	}
 	
 	private OnClickListener buttonAddBookmarkListener = new OnClickListener() {
 	    public void onClick(View v) {
+	    	SharedPreferences settings = getSharedPreferences(INT_STORE_PREFS, 0);
+	    	if (settings.getAll().size() == MAX_BOOKMARKS) {
+	    		createDialogTooManyBookmarks().show();
+	    		return;
+	    	}
+	    	
 	    	long timestamp = new Date().getTime();
 	    	Bookmark bookmark = new Bookmark(timestamp, scriptPosition.getBook(), scriptPosition.getChapter());
 	    	
-	    	SharedPreferences settings = getSharedPreferences(INT_STORE_PREFS, 0);
 		    SharedPreferences.Editor editor = settings.edit();
 		    editor.putString(String.valueOf(timestamp), bookmark.toString());
-		    editor.commit();
+		    boolean success = editor.commit();
+		    if (success) {
+		    	Toast toast = Toast.makeText(getApplicationContext(), 
+		    			resources.getString(R.string.toast_bookmark_added), 
+		    			Toast.LENGTH_SHORT);
+		    	toast.show();
+		    }
 		    
 		    displayBookmarks();
 	    }
@@ -130,7 +154,7 @@ public class BookmarkActivity extends Activity {
 	
 	private OnClickListener buttonClearBookmarksListener = new OnClickListener() {
 	    public void onClick(View v) {
-	    	dialogClearBookmarks.show();
+	    	createDialogClearBookmarks().show();
 	    }
 	};
 	
@@ -201,6 +225,10 @@ public class BookmarkActivity extends Activity {
 	    	tr.setGravity(Gravity.CENTER);
 	    	bookmarkTable.addView(tr);
 		}
+		
+		if (isNightMode()) {
+        	applyNightMode();
+        }
 	}
 	
 	private ArrayList<Bookmark> castBmObjectsToList(Object[] values) {
@@ -212,8 +240,7 @@ public class BookmarkActivity extends Activity {
 	}
 
 	private String getBookAbbreviation(int bookId) {
-		Resources res = getResources();
- 	   	String[] bookAbbrevs = res.getStringArray(R.array.books_abbreviations_array);
+ 	   	String[] bookAbbrevs = resources.getStringArray(R.array.books_abbreviations_array);
  	   	return bookAbbrevs[bookId];
 	}
 	
@@ -233,19 +260,50 @@ public class BookmarkActivity extends Activity {
 	    editor.commit();
 	}
 	
+	private AlertDialog createDialogClearBookmarks() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(R.string.dialog_clear_bookmarks_msg);
+		builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				clearBookmarks();
+				displayBookmarks();
+			}
+		});
+		builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		return builder.create();
+	}
+	
+	private AlertDialog createDialogTooManyBookmarks() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		builder.setMessage(resources.getString(R.string.dialog_bookmarks_too_many));
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		return builder.create();
+	}
+	
 	private AlertDialog createDialogActualizeBookmark(final Bookmark bookmark) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		StringBuilder msg = new StringBuilder();
-		Resources res = getResources();
-		msg.append(res.getString(R.string.dialog_actualize_bookmark_msg));
-		msg.append("\n" + res.getString(R.string.dialog_bookmark_msg_created));
-		msg.append(" " + bookmark.getDateString());
-		msg.append("\n" + res.getString(R.string.dialog_bookmark_msg_from));
+		msg.append(resources.getString(R.string.dialog_actualize_bookmark_msg));
+		msg.append("\n" + resources.getString(R.string.dialog_bookmark_msg_from));
 		msg.append(" " + getBookAbbreviation(bookmark.getBookId()));
 		msg.append(" " + (bookmark.getChapterId() + 1));
-		msg.append(" " + res.getString(R.string.dialog_bookmark_msg_to));
+		msg.append(" " + resources.getString(R.string.dialog_bookmark_msg_to));
 		msg.append(" " + getBookAbbreviation(scriptPosition.getBook()));
 		msg.append(" " + (scriptPosition.getChapter() + 1));
+		msg.append("\n" + resources.getString(R.string.dialog_bookmark_msg_created));
+		msg.append(" " + bookmark.getDateString());
 		
 		builder.setMessage(msg.toString());
 		builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
@@ -267,11 +325,10 @@ public class BookmarkActivity extends Activity {
 	private AlertDialog createDialogDeleteBookmark(final TableRow tableRow, final Bookmark bookmark) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		StringBuilder msg = new StringBuilder();
-		Resources res = getResources();
-		msg.append(res.getString(R.string.dialog_delete_bookmark_msg));
+		msg.append(resources.getString(R.string.dialog_delete_bookmark_msg));
 		msg.append("\n" + getBookAbbreviation(bookmark.getBookId()));
 		msg.append(" " + (bookmark.getChapterId() + 1));
-		msg.append("\n" + res.getString(R.string.dialog_bookmark_msg_created));
+		msg.append("\n" + resources.getString(R.string.dialog_bookmark_msg_created));
 		msg.append(" " + bookmark.getDateString());
 		
 		builder.setMessage(msg.toString());
@@ -289,6 +346,46 @@ public class BookmarkActivity extends Activity {
 			}
 		});
 		return builder.create();
+	}
+	
+	private boolean isNightMode() {
+		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+        nightMode = settings.getBoolean("nightMode", false);
+		return nightMode;
+	}
+	
+	private void applyNightMode() {
+		background.setBackgroundColor(resources.getColor(R.color.night_back));
+		for (int i = 0; i < bookmarkTable.getChildCount(); i++) {
+			TableRow tr = (TableRow) bookmarkTable.getChildAt(i);
+			for (int ii = 0; ii < tr.getChildCount(); ii++) {
+				View child = tr.getChildAt(ii);
+				if (!(child instanceof Button)) {
+					((TextView) child).setTextColor(resources.getColor(R.color.night_text));
+				}
+			}
+		}
+	}
+	
+	private void applyDayMode() {
+		background.setBackgroundColor(resources.getColor(R.color.day_back));
+		for (int i = 0; i < bookmarkTable.getChildCount(); i++) {
+			TableRow tr = (TableRow) bookmarkTable.getChildAt(i);
+			for (int ii = 0; ii < tr.getChildCount(); ii++) {
+				View child = tr.getChildAt(ii);
+				if (!(child instanceof Button)) {
+					((TextView) child).setTextColor(resources.getColor(R.color.day_text));
+				}
+			}
+		}
+	}
+	
+	private void saveNightModeState(boolean night) {
+		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putBoolean("nightMode", night);
+	    editor.commit();
+	    nightMode = night;
 	}
 
 }

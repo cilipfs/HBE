@@ -19,10 +19,16 @@ public class Bookmark {
 	}
 	
 	public Bookmark(String bookmarkStr) {
-		String[] bm = bookmarkStr.split(",");
-		this.timestamp = Long.parseLong(bm[0]);
-		this.bookId = Integer.parseInt(bm[1]);
-		this.chapterId = Integer.parseInt(bm[2]);
+		String[] bm = bookmarkStr.split("~");
+		for (int i = 0; i < bm.length; i++) {
+			if (i == 0) {
+				this.timestamp = Long.parseLong(bm[i]);
+			} else if (i == 1) {
+				this.bookId = Integer.parseInt(bm[i]);
+			} else if (i == 2) {
+				this.chapterId = Integer.parseInt(bm[i]);
+			}
+		}
 	}
 	
 	public String getDateString() {
@@ -56,6 +62,6 @@ public class Bookmark {
 	}
 
 	public String toString() {
-		return String.valueOf(timestamp) + "," + String.valueOf(bookId) + "," + String.valueOf(chapterId);
+		return String.valueOf(timestamp) + "~" + String.valueOf(bookId) + "~" + String.valueOf(chapterId);
 	}
 }

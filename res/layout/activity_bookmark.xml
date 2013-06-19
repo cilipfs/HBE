@@ -1,56 +1,59 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bookmark_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".BookmarkActivity" >
 
-    <ScrollView
-        android:id="@+id/scrollView1"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
         <LinearLayout
-            android:id="@+id/bookmark_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="4dp" >
+            android:layout_height="wrap_content"
+            android:padding="2dp" >
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
-
-                <Button
-                    android:id="@+id/button_clear_bookmarks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/button_clear_bookmarks" />
-
-                <Button
-                    android:id="@+id/button_add_bookmark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="50"
-                    android:text="@string/button_add_bookmark" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/bookmark_textView"
+            <Button
+                android:id="@+id/button_clear_bookmarks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp" />
+                android:text="@string/button_clear_bookmarks" />
 
-            <TableLayout
-                android:id="@+id/bookmark_table"
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/button_add_bookmark"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="2dp" >
-
-            </TableLayout>
+                android:layout_weight="50"
+                android:text="@string/button_add_bookmark" />
 
         </LinearLayout>
 
-    </ScrollView>
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:id="@+id/bookmark_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="8dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:paddingTop="8dp" >
+
+                <TableLayout
+                    android:id="@+id/bookmark_table"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp" >
+                </TableLayout>
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
 
 </RelativeLayout>
