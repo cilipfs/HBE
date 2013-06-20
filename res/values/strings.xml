@@ -41,5 +41,6 @@
     <string name="dialog_bookmarks_too_many">Dosiahnutý maximálny počet záložiek = 20.\nNie je možné pridať viac záložiek.</string>
     
     <string name="title_activity_history">História</string>
+    <string name="history_activity_option">História</string>
 
 </resources>

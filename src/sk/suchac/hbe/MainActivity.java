@@ -96,6 +96,10 @@ public class MainActivity extends Activity {
 				Intent intent = new Intent(this, BookmarkActivity.class);
 			    startActivity(intent);
 	            return true;
+	    	case R.id.show_history:
+	    		Intent intent2 = new Intent(this, HistoryActivity.class);
+			    startActivity(intent2);
+	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }

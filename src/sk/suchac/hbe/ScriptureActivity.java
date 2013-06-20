@@ -11,6 +11,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import sk.suchac.hbe.helpers.HistoryHelper;
 import sk.suchac.hbe.objects.ScripturePosition;
 import sk.suchac.hbe.parser.BibleXmlHandler;
 import android.app.Activity;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 
 public class ScriptureActivity extends Activity {
 	
+	private ScriptureActivity thisActivity = this;
 	private TextView textField;
 	private Button buttonPrevious;
 	private Button buttonNext;
@@ -140,6 +142,7 @@ public class ScriptureActivity extends Activity {
 		
 		textField.append(Html.fromHtml(handler.getHtmlOutput()));
 		this.setTitle(handler.getActualBookAbbreviationAndChapter());
+		HistoryHelper.saveRecord(thisActivity, bookIndex, chapterIndex);
 	}
 	
 	private void calculatePreviousAndNextChapter() {
