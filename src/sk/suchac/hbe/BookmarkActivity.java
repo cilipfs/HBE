@@ -66,6 +66,9 @@ public class BookmarkActivity extends Activity {
 			buttonAddBookmark.setEnabled(false);
 		} else {
 			enabledEditing = true;
+			buttonAddBookmark.setText(buttonAddBookmark.getText() + " " + 
+					getBookAbbreviation(scriptPosition.getBook()) + " " + 
+					(scriptPosition.getChapter() + 1));
 		}
 		
 	}
@@ -262,7 +265,7 @@ public class BookmarkActivity extends Activity {
 	
 	private AlertDialog createDialogClearBookmarks() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage(R.string.dialog_clear_bookmarks_msg);
+		builder.setTitle(R.string.dialog_clear_bookmarks_title);
 		builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -282,7 +285,8 @@ public class BookmarkActivity extends Activity {
 	private AlertDialog createDialogTooManyBookmarks() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		
-		builder.setMessage(resources.getString(R.string.dialog_bookmarks_too_many));
+		builder.setTitle(R.string.dialog_bookmarks_too_many_title);
+		builder.setMessage(R.string.dialog_bookmarks_too_many_msg);
 		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -295,16 +299,16 @@ public class BookmarkActivity extends Activity {
 	private AlertDialog createDialogActualizeBookmark(final Bookmark bookmark) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		StringBuilder msg = new StringBuilder();
-		msg.append(resources.getString(R.string.dialog_actualize_bookmark_msg));
-		msg.append("\n" + resources.getString(R.string.dialog_bookmark_msg_from));
+		msg.append(resources.getString(R.string.dialog_bookmark_msg_from));
 		msg.append(" " + getBookAbbreviation(bookmark.getBookId()));
 		msg.append(" " + (bookmark.getChapterId() + 1));
-		msg.append(" " + resources.getString(R.string.dialog_bookmark_msg_to));
+		msg.append("\n" + resources.getString(R.string.dialog_bookmark_msg_to));
 		msg.append(" " + getBookAbbreviation(scriptPosition.getBook()));
 		msg.append(" " + (scriptPosition.getChapter() + 1));
 		msg.append("\n" + resources.getString(R.string.dialog_bookmark_msg_created));
 		msg.append(" " + bookmark.getDateString());
 		
+		builder.setTitle(R.string.dialog_actualize_bookmark_title);
 		builder.setMessage(msg.toString());
 		builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 			@Override
@@ -325,12 +329,12 @@ public class BookmarkActivity extends Activity {
 	private AlertDialog createDialogDeleteBookmark(final TableRow tableRow, final Bookmark bookmark) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		StringBuilder msg = new StringBuilder();
-		msg.append(resources.getString(R.string.dialog_delete_bookmark_msg));
-		msg.append("\n" + getBookAbbreviation(bookmark.getBookId()));
+		msg.append(getBookAbbreviation(bookmark.getBookId()));
 		msg.append(" " + (bookmark.getChapterId() + 1));
 		msg.append("\n" + resources.getString(R.string.dialog_bookmark_msg_created));
 		msg.append(" " + bookmark.getDateString());
 		
+		builder.setTitle(R.string.dialog_delete_bookmark_title);
 		builder.setMessage(msg.toString());
 		builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 			@Override

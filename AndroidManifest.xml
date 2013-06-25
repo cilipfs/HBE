@@ -42,6 +42,10 @@
             android:name="sk.suchac.hbe.HistoryActivity"
             android:label="@string/title_activity_history" >
         </activity>
+        <activity
+            android:name="sk.suchac.hbe.SearchActivity"
+            android:label="@string/title_activity_search" >
+        </activity>
     </application>
 
 </manifest>

@@ -100,6 +100,10 @@ public class MainActivity extends Activity {
 	    		Intent intent2 = new Intent(this, HistoryActivity.class);
 			    startActivity(intent2);
 	            return true;
+	    	case R.id.show_search:
+	    		Intent intent3 = new Intent(this, SearchActivity.class);
+			    startActivity(intent3);
+	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }

@@ -32,15 +32,22 @@
     <string name="yes">Áno</string>
     <string name="no">Nie</string>
     <string name="ok">OK</string>
-    <string name="dialog_clear_bookmarks_msg">Vymazať všetky záložky?</string>
-    <string name="dialog_delete_bookmark_msg">Vymazať záložku?</string>
+    <string name="dialog_clear_bookmarks_title">Vymazať všetky záložky?</string>
+    <string name="dialog_delete_bookmark_title">Vymazať záložku?</string>
     <string name="dialog_bookmark_msg_created">Vytvorená</string>
-    <string name="dialog_actualize_bookmark_msg">Aktualizovať záložku?</string>
+    <string name="dialog_actualize_bookmark_title">Aktualizovať záložku?</string>
     <string name="dialog_bookmark_msg_from">Z:</string>
-    <string name="dialog_bookmark_msg_to">na:</string>
-    <string name="dialog_bookmarks_too_many">Dosiahnutý maximálny počet záložiek = 20.\nNie je možné pridať viac záložiek.</string>
-    
+    <string name="dialog_bookmark_msg_to">Na:</string>
+    <string name="dialog_bookmarks_too_many_title">Dosiahnuté maximum</string>
+    <string name="dialog_bookmarks_too_many_msg">Maximálny počet záložiek = 20.\nNie je možné pridať viac záložiek.</string>
     <string name="title_activity_history">História</string>
     <string name="history_activity_option">História</string>
+    
+    <string name="title_activity_search">Vyhľadávanie</string>
+    <string name="search_activity_option">Vyhľadávanie</string>
+    <string name="button_search">Vyhľadať</string>
+    <string name="search_cb_bible_whole">Celá Biblia</string>
+    <string name="search_cb_old_testament">Stará zmluva</string>
+    <string name="search_cb_new_testament">Nová zmluva</string>
 
 </resources>
