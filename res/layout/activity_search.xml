@@ -7,7 +7,7 @@
     tools:context=".SearchActivity" >
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/search_text_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10" >
@@ -16,16 +16,23 @@
     </EditText>
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/button_search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/button_search" />
 
-    <TextView
-        android:id="@+id/search_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/search_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </ScrollView>
 
     <CheckBox
         android:id="@+id/search_cb_bible_whole"
