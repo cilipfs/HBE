@@ -60,10 +60,10 @@ public class SearchXmlHandler extends DefaultHandler {
 		
 		if ("Chapter".equals(localName)) {
 			if (insideChapter) {
-				SearchResult chapterResult = 
+				ArrayList<SearchResult> chapterResults = 
 						ChapterSearcher.search(bookId, actualChapter, text.toString(), searchString);
-				if (chapterResult != null) {
-					results.add(chapterResult);
+				if (!chapterResults.isEmpty()) {
+					results.addAll(chapterResults);
 				}
 				text = new StringBuilder();
 			}
@@ -78,7 +78,6 @@ public class SearchXmlHandler extends DefaultHandler {
 		if (insideChapter && "Heading".equals(localName)) {
 			insideHeading = false;
 			text.append(HtmlHelper.getBoldEnd());
-			text.append(" ");
 			return;
 		}
 	}

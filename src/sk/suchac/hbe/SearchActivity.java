@@ -15,13 +15,17 @@ import org.xml.sax.SAXException;
 import sk.suchac.hbe.objects.SearchResult;
 import sk.suchac.hbe.parser.SearchXmlHandler;
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -30,8 +34,11 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 public class SearchActivity extends Activity {
+	
+	SearchActivity thisActivity = this;
 	
 	EditText textInput;
 	ListView searchList;
@@ -54,6 +61,8 @@ public class SearchActivity extends Activity {
 		resources = getResources();
 		
 		textInput = (EditText) findViewById(R.id.search_text_input);
+		textInput.setOnEditorActionListener(textInputOnEditorActionListener);
+		
 		searchList = (ListView) findViewById(R.id.listView1);
 		
 		buttonSearch = (Button) findViewById(R.id.button_search);
@@ -90,11 +99,11 @@ public class SearchActivity extends Activity {
 				return;
 			}
 			
-			for (int i = 0; i < searchList.getCount(); i++) {
-				if (searchList.isItemChecked(i)) {
+			for (int bookId = 0; bookId < searchList.getCount(); bookId++) {
+				if (searchList.isItemChecked(bookId)) {
 					
-					InputSource source = getInputSourceForBible(i);
-					SearchXmlHandler handler = new SearchXmlHandler(i, searchString);
+					InputSource source = getInputSourceForBible(bookId);
+					SearchXmlHandler handler = new SearchXmlHandler(bookId, searchString);
 					SAXParserFactory factoryImpl = SAXParserFactory.newInstance();
 					factoryImpl.setNamespaceAware(true);
 					SAXParser parser = null;
@@ -114,16 +123,29 @@ public class SearchActivity extends Activity {
 					}
 					
 					ArrayList<SearchResult> results = handler.getResults();
-					for (int ii = 0; ii < results.size(); ii++) {
-						SearchResult result = results.get(ii);
-						tv.append(Html.fromHtml(result.getBookId() + " " + result.getChapterId() + "\n" +
-								result.getSample()));
+					for (int i = 0; i < results.size(); i++) {
+						SearchResult result = results.get(i);
+						tv.append(Html.fromHtml(getBookAbbreviation(result.getBookId()) + " " + 
+								result.getChapterId() + "\n" + result.getSample()));
 						tv.append("\n\n");
 					}
-					
 				}
 			}
-			
+		}
+	};
+	
+	private OnEditorActionListener textInputOnEditorActionListener = new OnEditorActionListener() {
+		@Override
+		public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+			if (actionId == EditorInfo.IME_NULL  
+				      && event.getAction() == KeyEvent.ACTION_DOWN) { 
+				//InputMethodManager inputManager = 
+				//		(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE); 
+				//inputManager.hideSoftInputFromWindow(thisActivity.getCurrentFocus().getWindowToken(),
+				//        InputMethodManager.HIDE_NOT_ALWAYS);
+				buttonSearch.performClick();
+			}
+			return true;
 		}
 	};
 	
@@ -256,13 +278,8 @@ public class SearchActivity extends Activity {
 		return inputSource;
 	}
 	
-//	String[] concatTwoArrays(String[] a, String[] b) {
-//	   int aLen = a.length;
-//	   int bLen = b.length;
-//	   String[] c = new String[aLen + bLen];
-//	   System.arraycopy(a, 0, c, 0, aLen);
-//	   System.arraycopy(b, 0, c, aLen, bLen);
-//	   return c;
-//	}
-
+	private String getBookAbbreviation(int bookId) {
+ 	   	String[] bookAbbrevs = resources.getStringArray(R.array.books_abbreviations_array);
+ 	   	return bookAbbrevs[bookId];
+	}
 }
