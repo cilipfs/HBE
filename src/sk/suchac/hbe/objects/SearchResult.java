@@ -1,7 +1,7 @@
 package sk.suchac.hbe.objects;
 
 public class SearchResult {
-	
+
 	int bookId;
 	int chapterId;
 	String sample;

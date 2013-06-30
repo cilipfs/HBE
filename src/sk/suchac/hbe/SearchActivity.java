@@ -1,37 +1,26 @@
 package sk.suchac.hbe;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-import sk.suchac.hbe.objects.SearchResult;
-import sk.suchac.hbe.parser.SearchXmlHandler;
+import sk.suchac.hbe.objects.SearchOrder;
 import android.app.Activity;
-import android.content.Context;
-import android.content.res.AssetManager;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
@@ -40,10 +29,10 @@ public class SearchActivity extends Activity {
 	
 	SearchActivity thisActivity = this;
 	
+	LinearLayout background;
 	EditText textInput;
 	ListView searchList;
 	Button buttonSearch;
-	private TextView tv;
 	
 	CheckBox bibleWhole;
 	CheckBox oldTestament;
@@ -51,14 +40,21 @@ public class SearchActivity extends Activity {
 	
 	private static Resources resources;
 	
+	public static final String PREFS = "HbePrefsFile";
+	private static boolean nightMode;
+	
 	private static final int OLD_TESTAMENT_BOOKS = 39;
 	private static final int NEW_TESTAMENT_BOOKS = 27;
+	
+	public final static String INTENT_SEARCH_ORDER = "sk.suchac.hbe.SEARCH_ORDER";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 		resources = getResources();
+		
+		background = (LinearLayout) findViewById(R.id.search_background);
 		
 		textInput = (EditText) findViewById(R.id.search_text_input);
 		textInput.setOnEditorActionListener(textInputOnEditorActionListener);
@@ -74,7 +70,6 @@ public class SearchActivity extends Activity {
 		oldTestament.setOnClickListener(oldTestamentOnClickListener);
 		newTestament = (CheckBox) findViewById(R.id.search_cb_new_testament);
 		newTestament.setOnClickListener(newTestamentOnClickListener);
-		tv = (TextView) findViewById(R.id.search_textView);
 		
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 			android.R.layout.simple_list_item_multiple_choice, resources.getStringArray(R.array.books_array));
@@ -91,45 +86,58 @@ public class SearchActivity extends Activity {
 		return true;
 	}
 	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.night_day_mode:
+	    		switchNightDayMode();
+	    		return true;
+			case R.id.show_pick_activity:
+				Intent intent = new Intent(this, MainActivity.class);
+			    startActivity(intent);
+	            return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+        if (isNightMode()) {
+        	applyNightMode();
+        } else {
+        	applyDayMode();
+        }
+	}
+	
+	private void switchNightDayMode() {
+		if (nightMode) {
+			saveNightModeState(false);
+        	applyDayMode();
+        } else {
+        	saveNightModeState(true);
+        	applyNightMode();
+        }
+	}
+	
 	private OnClickListener buttonSearchOnClickListener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
 			String searchString = textInput.getText().toString().trim();
-			if (searchString == "") {
-				return;
-			}
+			if (searchString.compareTo("") != 0) {
 			
-			for (int bookId = 0; bookId < searchList.getCount(); bookId++) {
-				if (searchList.isItemChecked(bookId)) {
-					
-					InputSource source = getInputSourceForBible(bookId);
-					SearchXmlHandler handler = new SearchXmlHandler(bookId, searchString);
-					SAXParserFactory factoryImpl = SAXParserFactory.newInstance();
-					factoryImpl.setNamespaceAware(true);
-					SAXParser parser = null;
-					try {
-						parser = factoryImpl.newSAXParser();
-						try {
-							parser.parse(source, handler);
-						} catch (SAXException e) {
-							// log
-						} catch (IOException e) {
-							// log
-						}
-					} catch (ParserConfigurationException e) {
-						// log
-					} catch (SAXException e) {
-						// log
-					}
-					
-					ArrayList<SearchResult> results = handler.getResults();
-					for (int i = 0; i < results.size(); i++) {
-						SearchResult result = results.get(i);
-						tv.append(Html.fromHtml(getBookAbbreviation(result.getBookId()) + " " + 
-								result.getChapterId() + "\n" + result.getSample()));
-						tv.append("\n\n");
+				ArrayList<Integer> bookIds = new ArrayList<Integer>();
+				for (int bookId = 0; bookId < searchList.getCount(); bookId++) {
+					if (searchList.isItemChecked(bookId)) {
+						bookIds.add(bookId);
 					}
 				}
+				
+				SearchOrder order = new SearchOrder(searchString, bookIds);
+				Intent intent = new Intent(thisActivity, SearchResultsActivity.class);
+			    intent.putExtra(INTENT_SEARCH_ORDER, order);
+			    startActivity(intent);
 			}
 		}
 	};
@@ -263,23 +271,41 @@ public class SearchActivity extends Activity {
 		return success;
 	}
 	
-	private InputSource getInputSourceForBible(int bookIndex) {
-		AssetManager assetManager = getAssets();
-		InputSource inputSource = null;
-		InputStream inputStream = null;
-		try {
-			inputStream = assetManager.open(bookIndex + ".xml");
-			inputSource = new InputSource(inputStream);
-		} catch (FileNotFoundException e) {
-			// log
-		} catch (IOException e) {
-			// log
-		}
-		return inputSource;
+	private boolean isNightMode() {
+		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+        nightMode = settings.getBoolean("nightMode", false);
+		return nightMode;
 	}
 	
-	private String getBookAbbreviation(int bookId) {
- 	   	String[] bookAbbrevs = resources.getStringArray(R.array.books_abbreviations_array);
- 	   	return bookAbbrevs[bookId];
+	private void applyNightMode() {
+		background.setBackgroundColor(resources.getColor(R.color.night_back));
+		textInput.setTextColor(resources.getColor(R.color.night_text));
+		bibleWhole.setTextColor(resources.getColor(R.color.night_text));
+		oldTestament.setTextColor(resources.getColor(R.color.night_text));
+		newTestament.setTextColor(resources.getColor(R.color.night_text));
+		//for (int i = 0; i < searchList.getChildCount(); i++) {
+		//	View child = searchList.getChildAt(i);
+		//	((TextView) child).setTextColor(resources.getColor(R.color.night_text));
+		//}
+	}
+	
+	private void applyDayMode() {
+		background.setBackgroundColor(resources.getColor(R.color.day_back));
+		textInput.setTextColor(resources.getColor(R.color.day_text));
+		bibleWhole.setTextColor(resources.getColor(R.color.day_text));
+		oldTestament.setTextColor(resources.getColor(R.color.day_text));
+		newTestament.setTextColor(resources.getColor(R.color.day_text));
+		//for (int i = 0; i < searchList.getChildCount(); i++) {
+		//	View child = searchList.getChildAt(i);
+		//	((TextView) child).setTextColor(resources.getColor(R.color.day_text));
+		//}
+	}
+	
+	private void saveNightModeState(boolean night) {
+		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+	    SharedPreferences.Editor editor = settings.edit();
+	    editor.putBoolean("nightMode", night);
+	    editor.commit();
+	    nightMode = night;
 	}
 }

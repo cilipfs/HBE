@@ -35,7 +35,7 @@ public class SearchXmlHandler extends DefaultHandler {
 		}
 		if ("Chapter".equals(localName)) {
 			String chapterNumberString = atts.getValue("number");
-			actualChapter = Integer.valueOf(chapterNumberString);
+			actualChapter = Integer.valueOf(chapterNumberString) - 1;
 			insideChapter = true;
 			return;
 		}

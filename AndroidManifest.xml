@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sk.suchac.hbe"
-    android:versionCode="0129"
+    android:versionCode="0131"
     android:versionName="1.3" >
 
     <uses-sdk
@@ -45,6 +45,10 @@
         <activity
             android:name="sk.suchac.hbe.SearchActivity"
             android:label="@string/title_activity_search" >
+        </activity>
+        <activity
+            android:name="sk.suchac.hbe.SearchResultsActivity"
+            android:label="@string/title_activity_search_results" >
         </activity>
     </application>
 
