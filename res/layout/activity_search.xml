@@ -25,8 +25,9 @@
 
     <CheckBox
         android:id="@+id/search_cb_bible_whole"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:text="@string/search_cb_bible_whole" />
 
     <LinearLayout

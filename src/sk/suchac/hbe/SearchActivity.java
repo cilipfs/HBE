@@ -7,12 +7,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -53,27 +55,28 @@ public class SearchActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 		resources = getResources();
-		
-		background = (LinearLayout) findViewById(R.id.search_background);
-		
-		textInput = (EditText) findViewById(R.id.search_text_input);
-		textInput.setOnEditorActionListener(textInputOnEditorActionListener);
-		
-		searchList = (ListView) findViewById(R.id.listView1);
-		
-		buttonSearch = (Button) findViewById(R.id.button_search);
-		buttonSearch.setOnClickListener(buttonSearchOnClickListener);
-		
-		bibleWhole = (CheckBox) findViewById(R.id.search_cb_bible_whole);
-		bibleWhole.setOnClickListener(bibleWholeOnClickListener);
-		oldTestament = (CheckBox) findViewById(R.id.search_cb_old_testament);
-		oldTestament.setOnClickListener(oldTestamentOnClickListener);
-		newTestament = (CheckBox) findViewById(R.id.search_cb_new_testament);
-		newTestament.setOnClickListener(newTestamentOnClickListener);
+		initializeElements();
 		
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-			android.R.layout.simple_list_item_multiple_choice, resources.getStringArray(R.array.books_array));
+			android.R.layout.simple_list_item_multiple_choice, resources.getStringArray(R.array.books_array)) {
+			@Override
+	        public View getView(int position, View convertView,
+	                ViewGroup parent) {
+	            View view = super.getView(position, convertView, parent);
+
+	            TextView textView =(TextView) view.findViewById(android.R.id.text1);
+
+	            if (isNightMode()) {
+	            	textView.setTextColor(resources.getColor(R.color.night_text));
+	            } else {
+	            	textView.setTextColor(resources.getColor(R.color.day_text));
+	            }
+
+	            return view;
+	        }
+		};
 		searchList.setAdapter(adapter);
+		searchList.setCacheColorHint(Color.TRANSPARENT);
 		searchList.setOnItemClickListener(searchListListener);
 		
 		bibleWhole.performClick();
@@ -119,6 +122,25 @@ public class SearchActivity extends Activity {
         	saveNightModeState(true);
         	applyNightMode();
         }
+	}
+	
+	private void initializeElements() {
+		background = (LinearLayout) findViewById(R.id.search_background);
+		
+		textInput = (EditText) findViewById(R.id.search_text_input);
+		textInput.setOnEditorActionListener(textInputOnEditorActionListener);
+		
+		searchList = (ListView) findViewById(R.id.listView1);
+		
+		buttonSearch = (Button) findViewById(R.id.button_search);
+		buttonSearch.setOnClickListener(buttonSearchOnClickListener);
+		
+		bibleWhole = (CheckBox) findViewById(R.id.search_cb_bible_whole);
+		bibleWhole.setOnClickListener(bibleWholeOnClickListener);
+		oldTestament = (CheckBox) findViewById(R.id.search_cb_old_testament);
+		oldTestament.setOnClickListener(oldTestamentOnClickListener);
+		newTestament = (CheckBox) findViewById(R.id.search_cb_new_testament);
+		newTestament.setOnClickListener(newTestamentOnClickListener);
 	}
 	
 	private OnClickListener buttonSearchOnClickListener = new OnClickListener() {
@@ -280,25 +302,29 @@ public class SearchActivity extends Activity {
 	private void applyNightMode() {
 		background.setBackgroundColor(resources.getColor(R.color.night_back));
 		textInput.setTextColor(resources.getColor(R.color.night_text));
+		textInput.setBackgroundColor(resources.getColor(R.color.night_back));
 		bibleWhole.setTextColor(resources.getColor(R.color.night_text));
 		oldTestament.setTextColor(resources.getColor(R.color.night_text));
 		newTestament.setTextColor(resources.getColor(R.color.night_text));
-		//for (int i = 0; i < searchList.getChildCount(); i++) {
-		//	View child = searchList.getChildAt(i);
-		//	((TextView) child).setTextColor(resources.getColor(R.color.night_text));
-		//}
+		searchList.setBackgroundResource(R.color.night_back);
+		for (int i = 0; i < searchList.getChildCount(); i++) {
+			View child = searchList.getChildAt(i);
+			((TextView) child).setTextColor(resources.getColor(R.color.night_text));
+		}
 	}
 	
 	private void applyDayMode() {
 		background.setBackgroundColor(resources.getColor(R.color.day_back));
 		textInput.setTextColor(resources.getColor(R.color.day_text));
+		textInput.setBackgroundColor(resources.getColor(R.color.day_back));
 		bibleWhole.setTextColor(resources.getColor(R.color.day_text));
 		oldTestament.setTextColor(resources.getColor(R.color.day_text));
 		newTestament.setTextColor(resources.getColor(R.color.day_text));
-		//for (int i = 0; i < searchList.getChildCount(); i++) {
-		//	View child = searchList.getChildAt(i);
-		//	((TextView) child).setTextColor(resources.getColor(R.color.day_text));
-		//}
+		searchList.setBackgroundResource(R.color.day_back);
+		for (int i = 0; i < searchList.getChildCount(); i++) {
+			View child = searchList.getChildAt(i);
+			((TextView) child).setTextColor(resources.getColor(R.color.day_text));
+		}
 	}
 	
 	private void saveNightModeState(boolean night) {
