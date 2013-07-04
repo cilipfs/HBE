@@ -52,5 +52,8 @@
     <string name="search_cb_new_testament">Nová zmluva</string>
 
     <string name="title_activity_search_results">Výsledky vyhľadávania</string>
+    <string name="search_results_nothing_found">Neboli nájdené žiadne výsledky pre:</string>
+    <string name="search_results_too_many1">Príliš veľa výsledkov:</string>
+    <string name="search_results_too_many2">Zobrazených:</string>
 
 </resources>

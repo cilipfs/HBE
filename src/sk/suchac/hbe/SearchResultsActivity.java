@@ -49,6 +49,8 @@ public class SearchResultsActivity extends Activity {
 	public static final String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
 	public final static String INTENT_SEARCH_ORDER = "sk.suchac.hbe.SEARCH_ORDER";
 	SearchOrder order = new SearchOrder();
+	
+	private static final int MAX_RESULTS_DISPLAY = 100;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -152,8 +154,46 @@ public class SearchResultsActivity extends Activity {
         protected void onPostExecute(Void result) {
         	 // update
         	 progressBar.setVisibility(View.GONE);
+        	 
+        	 if (allResults.size() == 0) {
+        		 LinearLayout linLayout = new LinearLayout(thisActivity);
+        		 linLayout.setOrientation(LinearLayout.VERTICAL);
+        		 linLayout.setPadding(0, 2, 0, 14);
+        		 
+        		 TextView text = new TextView(thisActivity);
+        		 text.setText(resources.getString(R.string.search_results_nothing_found) + 
+        				 "\n" + order.getSearchString());
+     	    	 text.setPadding(5, 0, 5, 0);
+     	    	 text.setTextSize(18);
+     	    	 
+     	    	 linLayout.addView(text);
+    	    	 resultsContainer.addView(linLayout);
+        	 }
+        	 
+        	 if (allResults.size() > MAX_RESULTS_DISPLAY) {
+        		 LinearLayout linLayout = new LinearLayout(thisActivity);
+        		 linLayout.setOrientation(LinearLayout.VERTICAL);
+        		 linLayout.setPadding(0, 2, 0, 14);
+        		 
+        		 TextView text = new TextView(thisActivity);
+        		 StringBuilder sb = new StringBuilder();
+        		 sb.append(resources.getString(R.string.search_results_too_many1));
+        		 sb.append(" " + allResults.size() + "\n");
+        		 sb.append(resources.getString(R.string.search_results_too_many2));
+        		 sb.append(" " + MAX_RESULTS_DISPLAY);
+        		 text.setText(sb.toString());
+     	    	 text.setPadding(5, 0, 5, 0);
+     	    	 text.setTextSize(18);
+     	    	 
+     	    	 linLayout.addView(text);
+    	    	 resultsContainer.addView(linLayout);
+        	 }
 
         	 for (int i = 0; i < allResults.size(); i++) {
+        		 if (i == MAX_RESULTS_DISPLAY) {
+        			 break;
+        		 }
+        		 
         		 final SearchResult sResult = allResults.get(i);
         		 
         		 LinearLayout linLayout = new LinearLayout(thisActivity);
