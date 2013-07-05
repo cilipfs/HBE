@@ -32,11 +32,9 @@ public class BookmarkActivity extends Activity {
 	
 	private BookmarkActivity thisActivity = this;
 	private View background;
-	//private LinearLayout bookmarkContainer;
 	private Button buttonAddBookmark;
 	private Button buttonClearBookmarks;
 	private TableLayout bookmarkTable;
-	//private TextView tv;
 	
 	ScripturePosition scriptPosition = new ScripturePosition();
 	
@@ -118,7 +116,6 @@ public class BookmarkActivity extends Activity {
 	
 	private void initializeElements() {
 		background = findViewById(R.id.bookmark_layout);
-		//bookmarkContainer = (LinearLayout) findViewById(R.id.bookmark_container);
 		
 		buttonAddBookmark = (Button) findViewById(R.id.button_add_bookmark);
 		buttonAddBookmark.setOnClickListener(buttonAddBookmarkListener);
@@ -126,7 +123,6 @@ public class BookmarkActivity extends Activity {
 		buttonClearBookmarks = (Button) findViewById(R.id.button_clear_bookmarks);
 		buttonClearBookmarks.setOnClickListener(buttonClearBookmarksListener);
 		
-		//tv = (TextView) findViewById(R.id.bookmark_textView);
 		bookmarkTable = (TableLayout) findViewById(R.id.bookmark_table);
 	}
 	

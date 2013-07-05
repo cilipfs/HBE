@@ -50,6 +50,7 @@
     <string name="search_cb_bible_whole">Celá Biblia</string>
     <string name="search_cb_old_testament">Stará zmluva</string>
     <string name="search_cb_new_testament">Nová zmluva</string>
+    <string name="search_string_out_of_range">Rozsah znakov:</string>
 
     <string name="title_activity_search_results">Výsledky vyhľadávania</string>
     <string name="search_results_nothing_found">Neboli nájdené žiadne výsledky pre:</string>

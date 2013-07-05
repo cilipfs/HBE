@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
 
 public class SearchActivity extends Activity {
@@ -47,6 +48,9 @@ public class SearchActivity extends Activity {
 	
 	private static final int OLD_TESTAMENT_BOOKS = 39;
 	private static final int NEW_TESTAMENT_BOOKS = 27;
+	
+	private static final int SEARCH_STRING_MAX_LETTERS = 40;
+	private static final int SEARCH_STRING_MIN_LETTERS = 2;
 	
 	public final static String INTENT_SEARCH_ORDER = "sk.suchac.hbe.SEARCH_ORDER";
 
@@ -147,7 +151,7 @@ public class SearchActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			String searchString = textInput.getText().toString().trim();
-			if (searchString.compareTo("") != 0) {
+			if (validateSearchString(searchString)) {
 			
 				ArrayList<Integer> bookIds = new ArrayList<Integer>();
 				for (int bookId = 0; bookId < searchList.getCount(); bookId++) {
@@ -291,6 +295,23 @@ public class SearchActivity extends Activity {
 			}
 		}
 		return success;
+	}
+	
+	private boolean validateSearchString(String searchString) {
+		if (searchString.compareTo("") == 0) {
+			return false;
+		}
+		int letters = searchString.length();
+		if (letters < SEARCH_STRING_MIN_LETTERS || letters > SEARCH_STRING_MAX_LETTERS) {
+			Toast toast = Toast.makeText(getApplicationContext(), 
+				resources.getString(R.string.search_string_out_of_range) +
+					" " + SEARCH_STRING_MIN_LETTERS + "-" +
+					SEARCH_STRING_MAX_LETTERS, 
+				Toast.LENGTH_SHORT);
+	    	toast.show();
+			return false;
+		}
+		return true;
 	}
 	
 	private boolean isNightMode() {
