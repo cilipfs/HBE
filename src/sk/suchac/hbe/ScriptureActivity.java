@@ -101,6 +101,10 @@ public class ScriptureActivity extends Activity {
 				intent2.putExtra(INTENT_SCRIPTURE_POSITION, scriptPosition);
 			    startActivity(intent2);
 	            return true;
+			case R.id.show_settings:
+	    		Intent intent3 = new Intent(this, SettingsActivity.class);
+			    startActivity(intent3);
+	            return true;
 //			case R.id.exit:
 //				Intent intent2 = new Intent(this, FinishingActivity.class);
 //	        	intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
