@@ -2,18 +2,16 @@ package sk.suchac.hbe;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 	
 	private static Resources resources;
 	public static final String KEY_PREF_FONT_SIZE = "pref_fontSize";
@@ -54,6 +52,18 @@ public class SettingsActivity extends PreferenceActivity {
     	ListView lv = getListView();
     	lv.setBackgroundResource(R.color.night_back);
     	setTheme(R.style.NightMode);
+    }
+    
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+    }
+    
+    @Override
+    protected void onPause() {
+    	super.onPause();
+    	getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
 
 }
