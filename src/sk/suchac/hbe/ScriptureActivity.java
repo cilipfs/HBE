@@ -52,7 +52,6 @@ public class ScriptureActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scripture);
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		
 		background = findViewById(R.id.scripture_layout);
 		textField = (TextView) findViewById(R.id.textView);
