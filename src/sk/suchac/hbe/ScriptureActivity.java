@@ -38,6 +38,7 @@ public class ScriptureActivity extends Activity {
 	
 	public static final String PREFS = "HbePrefsFile";
 	private static boolean nightMode;
+	public static final String SETTINGS_PREFS = "HbeSettingsPrefs";
 	
 	public final static String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
 	ScripturePosition scriptPosition = new ScripturePosition();
@@ -84,7 +85,20 @@ public class ScriptureActivity extends Activity {
         } else {
         	applyDayMode();
         }
+        
+        if (isKeepScreenOn()) {
+        	getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+        	getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+        
+        applyFontSize();
     }
+
+	private void applyFontSize() {
+		SharedPreferences settings = getSharedPreferences(SETTINGS_PREFS, 0);
+		textField.setTextSize(settings.getInt("fontSize", 18));
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -105,12 +119,6 @@ public class ScriptureActivity extends Activity {
 	    		Intent intent3 = new Intent(this, SettingsActivity.class);
 			    startActivity(intent3);
 	            return true;
-//			case R.id.exit:
-//				Intent intent2 = new Intent(this, FinishingActivity.class);
-//	        	intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//	        	startActivity(intent2);
-//	        	finish();
-//	            return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -255,6 +263,11 @@ public class ScriptureActivity extends Activity {
 		Resources res = getResources();
  	   	String[] bookAbbrevs = res.getStringArray(R.array.books_abbreviations_array);
  	   	return bookAbbrevs[bookId];
+	}
+	
+	private boolean isKeepScreenOn() {
+		SharedPreferences settings = getSharedPreferences(SETTINGS_PREFS, 0);
+        return settings.getBoolean("keepScreenOn", false);
 	}
 	
 	private boolean isNightMode() {

@@ -41,7 +41,7 @@ public class SettingsActivity extends Activity {
         cbKeepScreenOn.setChecked(settings.getBoolean("keepScreenOn", false));
         cbKeepScreenOn.setOnClickListener(keepScreenOnOnClickListener);
         
-        btnFontSize.setText(String.valueOf(settings.getInt("fontSize", 22)));
+        btnFontSize.setText(String.valueOf(settings.getInt("fontSize", 18)));
         btnFontSize.setOnClickListener(btnFontSizeListener);
 	}
 

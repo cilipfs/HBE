@@ -12,12 +12,9 @@
         android:id="@+id/show_pick_activity"
         android:showAsAction="never"
         android:title="@string/pick_activity_option"/>
-    
-    <!--  
     <item
-        android:id="@+id/exit"
+        android:id="@+id/show_settings"
         android:showAsAction="never"
-        android:title="@string/exit_option"/>
-        -->
+        android:title="@string/settigs_activity_option"/>
 
 </menu>
