@@ -205,13 +205,19 @@
 		<item>1</item>
 		<item>22</item>
     </array>
-    <string-array name="pref_fontSize">
+    <array name="font_size_texts">
+        <item>XS (14)</item>
+        <item>S (16)</item>
+        <item>M (18)</item>
+        <item>L (20)</item>
+        <item>XL (22)</item>
+    </array>
+    <integer-array name="font_size">
         <item>14</item>
         <item>16</item>
         <item>18</item>
         <item>20</item>
         <item>22</item>
-    </string-array>
-    <string name="pref_fontSize_default">18</string>
+    </integer-array>
 
 </resources>

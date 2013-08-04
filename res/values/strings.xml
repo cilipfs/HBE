@@ -40,10 +40,8 @@
     <string name="dialog_bookmark_msg_to">Na:</string>
     <string name="dialog_bookmarks_too_many_title">Dosiahnuté maximum</string>
     <string name="dialog_bookmarks_too_many_msg">Maximálny počet záložiek = 20.\nNie je možné pridať viac záložiek.</string>
-    
     <string name="title_activity_history">História</string>
     <string name="history_activity_option">História</string>
-    
     <string name="title_activity_search">Vyhľadávanie</string>
     <string name="search_activity_option">Vyhľadávanie</string>
     <string name="button_search">Vyhľadať</string>
@@ -51,7 +49,6 @@
     <string name="search_cb_old_testament">Stará zmluva</string>
     <string name="search_cb_new_testament">Nová zmluva</string>
     <string name="search_string_out_of_range">Rozsah znakov:</string>
-
     <string name="title_activity_search_results">Výsledky vyhľadávania</string>
     <string name="search_results_nothing_found">Neboli nájdené žiadne výsledky pre:</string>
     <string name="search_results_too_many1">Príliš veľa výsledkov:</string>
@@ -59,8 +56,9 @@
     
     <string name="title_activity_settings">Nastavenia</string>
     <string name="settigs_activity_option">Nastavenia</string>
-    <string name="pref_keepScreenOn">Nezhasínať obrazovku</string>
-    <string name="pref_keepScreenOn_summ">Nezhasínať obrazovku počas zobrazeného biblického textu</string>
-    <string name="pref_fontSize">Veľkosť písma</string>
+    <string name="setting_keepScreenOn">Nezhasínať obrazovku</string>
+    <string name="setting_keepScreenOn_summ">Nezhasínať obrazovku počas zobrazeného biblického textu</string>
+    <string name="setting_fontSize">Veľkosť písma</string>
+    <string name="setting_fontSize_summ">Veľkosť písma biblického textu</string>
 
 </resources>
