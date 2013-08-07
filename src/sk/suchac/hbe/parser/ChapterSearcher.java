@@ -13,7 +13,7 @@ public class ChapterSearcher {
 		
 		ArrayList<SearchResult> results = new ArrayList<SearchResult>();
 		
-		String[] words = searchString.split(" ");
+		String[] words = searchString.toLowerCase().split(" ");
 		StringBuilder regexBuilder = new StringBuilder();
 		for (int i = 0; i < words.length; i++) {
 			regexBuilder.append(words[i]);
@@ -22,8 +22,10 @@ public class ChapterSearcher {
 			}
 		}
 		
+		String textForMatching = text.toLowerCase();
+		
 		Pattern pattern = Pattern.compile(regexBuilder.toString());
-	    Matcher matcher = pattern.matcher(text);
+	    Matcher matcher = pattern.matcher(textForMatching);
 	    
 	    while (matcher.find()) {
 	    	SearchResult result = new SearchResult();
