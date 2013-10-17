@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sk.suchac.hbe"
-    android:versionCode="0140"
+    android:versionCode="0141"
     android:versionName="1.4" >
 
     <uses-sdk
@@ -53,6 +53,10 @@
         <activity
             android:name="sk.suchac.hbe.SettingsActivity"
             android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name="sk.suchac.hbe.AboutActivity"
+            android:label="@string/title_activity_about" >
         </activity>
     </application>
 

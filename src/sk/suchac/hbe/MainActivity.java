@@ -108,6 +108,10 @@ public class MainActivity extends Activity {
 	    		Intent intent4 = new Intent(this, SettingsActivity.class);
 			    startActivity(intent4);
 	            return true;
+	    	case R.id.show_about:
+	    		Intent intent5 = new Intent(this, AboutActivity.class);
+	    		startActivity(intent5);
+	    		return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }

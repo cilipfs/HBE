@@ -53,12 +53,14 @@
     <string name="search_results_nothing_found">Neboli nájdené žiadne výsledky pre:</string>
     <string name="search_results_too_many1">Príliš veľa výsledkov:</string>
     <string name="search_results_too_many2">Zobrazených:</string>
-    
     <string name="title_activity_settings">Nastavenia</string>
     <string name="settigs_activity_option">Nastavenia</string>
     <string name="setting_keepScreenOn">Nezhasínať obrazovku</string>
     <string name="setting_keepScreenOn_summ">Nezhasínať obrazovku počas zobrazeného biblického textu</string>
     <string name="setting_fontSize">Veľkosť písma</string>
     <string name="setting_fontSize_summ">Veľkosť písma biblického textu</string>
+    <string name="title_activity_about">O aplikácii</string>
+    <string name="about_activity_option">O aplikácii</string>
+    <string name="about_text">Lorem ipsum...</string>
 
 </resources>
