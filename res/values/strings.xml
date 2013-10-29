@@ -61,6 +61,8 @@
     <string name="setting_fontSize_summ">Veľkosť písma biblického textu</string>
     <string name="title_activity_about">O aplikácii</string>
     <string name="about_activity_option">O aplikácii</string>
-    <string name="about_text">Lorem ipsum...</string>
+    <string name="about_text1">Slovenský ekumenický preklad</string>
+    <string name="about_text2">© Slovenská biblická spoločnosť, 2008</string>
+    <string name="about_text3">www.biblickaspolocnost.sk</string>
 
 </resources>
