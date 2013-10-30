@@ -16,16 +16,18 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="22dp"
-        android:text="@string/about_text1" />
+        android:text="@string/about_text1"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:id="@+id/about_text2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_below="@+id/about_text1"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:text="@string/about_text2" />
+        android:text="@string/about_text2"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/about_text3"
@@ -35,6 +37,7 @@
         android:layout_below="@+id/about_text2"
         android:layout_marginTop="10dp"
         android:text="@string/about_text3"
-        android:autoLink="web" />
+        android:autoLink="web"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

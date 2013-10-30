@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="sk.suchac.hbe"
-    android:versionCode="0142"
+    android:versionCode="0143"
     android:versionName="1.4" >
 
     <uses-sdk
