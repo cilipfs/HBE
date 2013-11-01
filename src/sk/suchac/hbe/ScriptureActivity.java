@@ -118,6 +118,10 @@ public class ScriptureActivity extends Activity {
 	    		Intent intent3 = new Intent(this, SettingsActivity.class);
 			    startActivity(intent3);
 	            return true;
+			case R.id.show_about:
+	    		Intent intent4 = new Intent(this, AboutActivity.class);
+	    		startActivity(intent4);
+	    		return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
