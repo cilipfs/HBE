@@ -16,6 +16,7 @@ public class AboutActivity extends Activity {
 	private TextView tvAbout1;
 	private TextView tvAbout2;
 	private TextView tvAbout3;
+	private TextView tvAboutDescription;
 	
 	private Resources resources;
 	
@@ -76,6 +77,7 @@ public class AboutActivity extends Activity {
 		tvAbout1 = (TextView) findViewById(R.id.about_text1);
 		tvAbout2 = (TextView) findViewById(R.id.about_text2);
 		tvAbout3 = (TextView) findViewById(R.id.about_text3);
+		tvAboutDescription = (TextView) findViewById(R.id.about_description);
 	}
 	
 	private boolean isNightMode() {
@@ -89,6 +91,7 @@ public class AboutActivity extends Activity {
 		tvAbout1.setTextColor(resources.getColor(R.color.night_text));
 		tvAbout2.setTextColor(resources.getColor(R.color.night_text));
 		tvAbout3.setTextColor(resources.getColor(R.color.night_text));
+		tvAboutDescription.setTextColor(resources.getColor(R.color.night_text));
 	}
 	
 	private void applyDayMode() {
@@ -96,6 +99,7 @@ public class AboutActivity extends Activity {
 		tvAbout1.setTextColor(resources.getColor(R.color.day_text));
 		tvAbout2.setTextColor(resources.getColor(R.color.day_text));
 		tvAbout3.setTextColor(resources.getColor(R.color.day_text));
+		tvAboutDescription.setTextColor(resources.getColor(R.color.day_text));
 	}
 	
 	private void saveNightModeState(boolean night) {

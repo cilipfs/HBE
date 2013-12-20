@@ -216,7 +216,13 @@ public class ScriptureActivity extends Activity {
 			buttonNext.setText(getBookAbbreviation(scriptNext.getBook()) + " " + String.valueOf(scriptNext.getChapter() + 1) + " >");
 		}
 	}
-
+	
+	// onClick for buttonAbout, buttonSeb
+	public void displayAbout(View view) {
+		Intent intent = new Intent(this, AboutActivity.class);
+	    startActivity(intent);
+	}
+	
 	// onClick for buttonNext
 	public void turnToNextChapter(View view) {
 		scriptPosition.setBook(scriptNext.getBook());
