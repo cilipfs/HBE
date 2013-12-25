@@ -1,24 +1,14 @@
 package sk.suchac.hbe;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
+import sk.suchac.hbe.db.DAO;
 import sk.suchac.hbe.helpers.HistoryHelper;
+import sk.suchac.hbe.objects.Book;
+import sk.suchac.hbe.objects.Chapter;
 import sk.suchac.hbe.objects.ScripturePosition;
-import sk.suchac.hbe.parser.BibleXmlHandler;
+import sk.suchac.hbe.objects.Verse;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.Menu;
@@ -36,6 +26,8 @@ public class ScriptureActivity extends Activity {
 	private Button buttonNext;
 	private View background;
 	
+	private DAO datasource;
+	
 	public static final String PREFS = "HbePrefsFile";
 	private static boolean nightMode;
 	public static final String SETTINGS_PREFS = "HbeSettingsPrefs";
@@ -46,12 +38,17 @@ public class ScriptureActivity extends Activity {
 	ScripturePosition scriptPrevious = new ScripturePosition();
 	ScripturePosition scriptNext = new ScripturePosition();
 	
+	Chapter chapter;
+	
 	int TOTAL_BOOKS_NUMBER = 66;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scripture);
+		
+		datasource = new DAO(this);
+		datasource.open();
 		
 		background = findViewById(R.id.scripture_layout);
 		textField = (TextView) findViewById(R.id.textView);
@@ -62,11 +59,15 @@ public class ScriptureActivity extends Activity {
 		
 		Intent intent = getIntent();
 		scriptPosition = (ScripturePosition) intent.getSerializableExtra(MainActivity.INTENT_SCRIPTURE_POSITION);
-		displayScriptureText(scriptPosition.getBook(), scriptPosition.getChapter());
+		
+		chapter = datasource.getChapter(scriptPosition.getBook() + 1, scriptPosition.getChapter() + 1);
+		displayScriptureText();
+		HistoryHelper.saveRecord(thisActivity, scriptPosition.getBook(), scriptPosition.getChapter());
 		
 		calculatePreviousAndNextChapter();
 		setPreviousAndNextButtonText();
         
+		datasource.close();
 	}
 
 	@Override
@@ -136,30 +137,15 @@ public class ScriptureActivity extends Activity {
         }
 	}
 
-	private void displayScriptureText(int bookIndex, int chapterIndex) {
-		InputSource source = getInputSourceForBible(bookIndex);
-		BibleXmlHandler handler = new BibleXmlHandler(chapterIndex);
-		SAXParserFactory factoryImpl = SAXParserFactory.newInstance();
-		factoryImpl.setNamespaceAware(true);
-		SAXParser parser = null;
-		try {
-			parser = factoryImpl.newSAXParser();
-			try {
-				parser.parse(source, handler);
-			} catch (SAXException e) {
-				// log
-			} catch (IOException e) {
-				// log
-			}
-		} catch (ParserConfigurationException e) {
-			// log
-		} catch (SAXException e) {
-			// log
+	private void displayScriptureText() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<b>" + chapter.getBook().getTitle() + " " + chapter.getNumber() + "</b><br />");
+		for (Verse verse : chapter.getVerses()) {
+			sb.append("<br/><b>" + verse.getNumber() + "</b><br />" + verse.getText());
 		}
-		
-		textField.append(Html.fromHtml(handler.getHtmlOutput()));
-		this.setTitle(handler.getActualBookAbbreviationAndChapter());
-		HistoryHelper.saveRecord(thisActivity, bookIndex, chapterIndex);
+		sb.append("<br />");
+		textField.append(Html.fromHtml(sb.toString()));
+		this.setTitle(chapter.getBook().getAbbreviation() + " " + chapter.getNumber());
 	}
 	
 	private void calculatePreviousAndNextChapter() {
@@ -241,37 +227,13 @@ public class ScriptureActivity extends Activity {
 	    startActivity(intent);
 	}
 	
-	private InputSource getInputSourceForBible(int bookIndex) {
-		AssetManager assetManager = getAssets();
-		InputSource inputSource = null;
-		InputStream inputStream = null;
-		try {
-			inputStream = assetManager.open(bookIndex + ".xml");
-			inputSource = new InputSource(inputStream);
-		} catch (FileNotFoundException e) {
-			// log
-		} catch (IOException e) {
-			// log
-		}
-		return inputSource;
-	}
-	
 	private int getTotalChaptersNumber(int bookId) {
-		Resources res = getResources();
- 	   	int[] totalChapters = res.getIntArray(R.array.total_chapters_array);
- 	   	return totalChapters[bookId];
-	}
-	
-	private String getBookName(int bookId) {
-		Resources res = getResources();
- 	   	String[] books = res.getStringArray(R.array.books_array);
- 	   	return books[bookId];
+ 	   	return datasource.getTotalChaptersOfBook(bookId + 1);
 	}
 	
 	private String getBookAbbreviation(int bookId) {
-		Resources res = getResources();
- 	   	String[] bookAbbrevs = res.getStringArray(R.array.books_abbreviations_array);
- 	   	return bookAbbrevs[bookId];
+		Book book = datasource.getBook(bookId + 1);
+ 	   	return book.getAbbreviation();
 	}
 	
 	private boolean isKeepScreenOn() {

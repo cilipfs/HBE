@@ -1,5 +1,6 @@
 package sk.suchac.hbe;
 
+import sk.suchac.hbe.db.DAO;
 import sk.suchac.hbe.objects.ScripturePosition;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +32,8 @@ public class MainActivity extends Activity {
 	private TextView subtitle;
 	private TextView backDescription;
 	
+	private DAO datasource;
+	
 	public static final String PREFS = "HbePrefsFile";
 	private static boolean nightMode;
 	
@@ -43,21 +47,9 @@ public class MainActivity extends Activity {
         thisActivity = this;
         initializeElements();
         
-        picked.setBook(-1);
-        picked.setChapter(-1);
-        buttonChapter.setEnabled(false);
-        buttonPick.setEnabled(false);
-        
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setItems(R.array.books_array, new DialogInterface.OnClickListener() {
-        	public void onClick(DialogInterface dialog, int which) {
-        		setPickedBook(which);
-        		setPickedChapter(0);	// set first chapter (0) after picking book
-        		buttonPick.setEnabled(true);
-        		buildChaptersDialog();
-        	}
-        });
-        bookDialog = builder.create();
+        disableButtons();
+    	subtitle.setText(R.string.title_updating);
+        new UpdateDBTask().execute();
 
     }
 
@@ -137,6 +129,53 @@ public class MainActivity extends Activity {
     	title = (TextView) findViewById(R.id.textView_title_bible);
     	subtitle = (TextView) findViewById(R.id.textView_subtitle_bible);
     	backDescription = (TextView) findViewById(R.id.textView_description_back);
+	}
+	
+private class UpdateDBTask extends AsyncTask<Void, Void, Void> {
+		
+        @Override
+        protected Void doInBackground(Void... params) {
+        	datasource = new DAO(thisActivity);
+        	datasource.initialize();
+        	datasource.open();
+        	return null;
+        }
+        
+        protected void onPostExecute(Void result) {
+        	 // update
+        	enableButtons();
+        	subtitle.setText(R.string.subtitle_bible);
+        	
+        	picked.setBook(-1);
+            picked.setChapter(-1);
+            buttonChapter.setEnabled(false);
+            buttonPick.setEnabled(false);
+            
+            AlertDialog.Builder builder = new AlertDialog.Builder(thisActivity);
+            builder.setItems(R.array.books_array, new DialogInterface.OnClickListener() {
+            	public void onClick(DialogInterface dialog, int which) {
+            		setPickedBook(which);
+            		setPickedChapter(0);	// set first chapter (0) after picking book
+            		buttonPick.setEnabled(true);
+            		buildChaptersDialog();
+            	}
+            });
+            bookDialog = builder.create();
+            
+            datasource.close();
+        }          
+    }
+	
+	private void disableButtons() {
+		buttonBook.setEnabled(false);
+        buttonChapter.setEnabled(false);
+        buttonPick.setEnabled(false);
+	}
+	
+	private void enableButtons() {
+		buttonBook.setEnabled(true);
+        buttonChapter.setEnabled(true);
+        buttonPick.setEnabled(true);
 	}
 	
 	private OnClickListener buttonBookListener = new OnClickListener() {
