@@ -2,7 +2,9 @@ package sk.suchac.hbe;
 
 import java.util.List;
 
+import sk.suchac.hbe.db.DAO;
 import sk.suchac.hbe.helpers.HistoryHelper;
+import sk.suchac.hbe.objects.Book;
 import sk.suchac.hbe.objects.HistoryRecord;
 import sk.suchac.hbe.objects.ScripturePosition;
 import android.app.Activity;
@@ -27,6 +29,8 @@ public class HistoryActivity extends Activity {
 	TableLayout historyTable;
 	RelativeLayout background;
 	
+	private DAO datasource;
+	
 	public final static String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
 	public static final String PREFS = "HbePrefsFile";
 	private static boolean nightMode;
@@ -39,10 +43,14 @@ public class HistoryActivity extends Activity {
 		setContentView(R.layout.activity_history);
 		resources = getResources();
 		
+		datasource = new DAO(this);
+		datasource.open();
+		
 		historyTable = (TableLayout) findViewById(R.id.history_table);
 		background = (RelativeLayout) findViewById(R.id.history_layout);
 		
 		displayHistoryRecords();
+		datasource.close();
 	}
 
 	@Override
@@ -69,7 +77,9 @@ public class HistoryActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
+		datasource.open();
 		displayHistoryRecords();
+		datasource.close();
 		
 		if (isNightMode()) {
         	applyNightMode();
@@ -127,8 +137,8 @@ public class HistoryActivity extends Activity {
 	}
 	
 	private String getBookAbbreviation(int bookId) {
- 	   	String[] bookAbbrevs = resources.getStringArray(R.array.books_abbreviations_array);
- 	   	return bookAbbrevs[bookId];
+		Book book = datasource.getBook(bookId + 1);
+ 	   	return book.getAbbreviation();
 	}
 	
 	private boolean isNightMode() {

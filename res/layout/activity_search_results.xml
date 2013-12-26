@@ -11,7 +11,7 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:indeterminate="false"
+        android:indeterminate="true"
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingTop="40dp" />

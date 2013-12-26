@@ -5,6 +5,7 @@ import java.util.List;
 
 import sk.suchac.hbe.objects.Book;
 import sk.suchac.hbe.objects.Chapter;
+import sk.suchac.hbe.objects.SearchResult;
 import sk.suchac.hbe.objects.Verse;
 import android.content.Context;
 import android.database.Cursor;
@@ -131,6 +132,33 @@ public class DAO {
 		  
 		  return count;
 	  }
+	  
+	  public List<SearchResult> getSearchResults(List<Integer> bookIds, String searchString) {
+		  List<SearchResult> results = new ArrayList<SearchResult>();
+		  
+		  StringBuilder query = new StringBuilder();
+		  query.append("SELECT book._id, chapter.NUMBER, verse.NUMBER, verse.TEXT FROM (SELECT * FROM BOOK WHERE ");
+		  for (int i = 0; i < bookIds.size(); i++) {
+			  Integer bookId = bookIds.get(i);
+			  if (i == 0) {
+				  query.append("_id='" + (bookId + 1) + "'");
+			  } else {
+				  query.append(" OR _id='" + (bookId + 1) + "'");
+			  }
+		  }
+		  query.append(") as book JOIN CHAPTER as chapter ON book._id=chapter.BOOK_ID JOIN VERSE as verse ON chapter._id=verse.CHAPTER_ID WHERE TEXT LIKE ?");
+	      
+		  Cursor cursor = database.rawQuery(query.toString(), new String[] {"%" + searchString + "%"});
+	      cursor.moveToFirst();
+	      while (!cursor.isAfterLast()) {
+			  SearchResult result = cursorToSearcHResult(cursor);
+		      results.add(result);
+		      cursor.moveToNext();
+		  }
+		  cursor.close();
+		  
+		  return results;
+	  }
 
 	  private Chapter cursorToChapter(Cursor cursor) {
 		  Chapter chapter = new Chapter();
@@ -155,6 +183,14 @@ public class DAO {
 		  verse.setNumber(cursor.getString(2));
 		  verse.setText(cursor.getString(3));
 		  return verse;
+	  }
+	  
+	  private SearchResult cursorToSearcHResult(Cursor cursor) {
+		  SearchResult sr = new SearchResult();
+		  sr.setBookId(cursor.getInt(0) - 1);
+		  sr.setChapterId(cursor.getInt(1) - 1);
+		  sr.setSample("<b>" + cursor.getString(2) + "</b>" + " " + cursor.getString(3));	// TODO spravit nejaky formater tychto veci
+		  return sr;
 	  }
 }
 

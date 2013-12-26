@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import sk.suchac.hbe.db.DAO;
+import sk.suchac.hbe.objects.Book;
 import sk.suchac.hbe.objects.Bookmark;
 import sk.suchac.hbe.objects.BookmarkComparator;
 import sk.suchac.hbe.objects.ScripturePosition;
@@ -36,6 +38,8 @@ public class BookmarkActivity extends Activity {
 	private Button buttonClearBookmarks;
 	private TableLayout bookmarkTable;
 	
+	private DAO datasource;
+	
 	ScripturePosition scriptPosition = new ScripturePosition();
 	
 	private boolean enabledEditing;
@@ -55,6 +59,9 @@ public class BookmarkActivity extends Activity {
 		setContentView(R.layout.activity_bookmark);
 		resources = getResources();
 		
+		datasource = new DAO(this);
+		datasource.open();
+		
 		initializeElements();
 		
 		Intent intent = getIntent();
@@ -68,6 +75,8 @@ public class BookmarkActivity extends Activity {
 					getBookAbbreviation(scriptPosition.getBook()) + " " + 
 					(scriptPosition.getChapter() + 1));
 		}
+		
+		datasource.close();
 		
 	}
 
@@ -95,7 +104,9 @@ public class BookmarkActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
+		datasource.open();
 		displayBookmarks();
+		datasource.close();
 		
         if (isNightMode()) {
         	applyNightMode();
@@ -128,6 +139,7 @@ public class BookmarkActivity extends Activity {
 	
 	private OnClickListener buttonAddBookmarkListener = new OnClickListener() {
 	    public void onClick(View v) {
+	    	datasource.open();
 	    	SharedPreferences settings = getSharedPreferences(INT_STORE_PREFS, 0);
 	    	if (settings.getAll().size() == MAX_BOOKMARKS) {
 	    		createDialogTooManyBookmarks().show();
@@ -148,6 +160,7 @@ public class BookmarkActivity extends Activity {
 		    }
 		    
 		    displayBookmarks();
+		    datasource.close();
 	    }
 	};
 	
@@ -205,7 +218,9 @@ public class BookmarkActivity extends Activity {
 	    	}
 	    	btnActualize.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
+					datasource.open();
 					createDialogActualizeBookmark(bookmark).show();
+					datasource.close();
 				}
 			});
 	    	tr.addView(btnActualize);
@@ -215,7 +230,9 @@ public class BookmarkActivity extends Activity {
 	    	btnDelete.setLayoutParams(new TableRow.LayoutParams(0, LayoutParams.WRAP_CONTENT, 50));
 	    	btnDelete.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
+					datasource.open();
 					createDialogDeleteBookmark(tr, bookmark).show();
+					datasource.close();
 				}
 			});
 	    	tr.addView(btnDelete);
@@ -239,8 +256,8 @@ public class BookmarkActivity extends Activity {
 	}
 
 	private String getBookAbbreviation(int bookId) {
- 	   	String[] bookAbbrevs = resources.getStringArray(R.array.books_abbreviations_array);
- 	   	return bookAbbrevs[bookId];
+		Book book = datasource.getBook(bookId + 1);
+ 	   	return book.getAbbreviation();
 	}
 	
 	private void actualizeBookmark(long timestamp) {
@@ -265,8 +282,10 @@ public class BookmarkActivity extends Activity {
 		builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				datasource.open();
 				clearBookmarks();
 				displayBookmarks();
+				datasource.close();
 			}
 		});
 		builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -309,8 +328,10 @@ public class BookmarkActivity extends Activity {
 		builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				datasource.open();
 				actualizeBookmark(bookmark.getTimestamp());
 				displayBookmarks();
+				datasource.close();
 			}
 		});
 		builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

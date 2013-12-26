@@ -2,6 +2,7 @@ package sk.suchac.hbe;
 
 import java.util.ArrayList;
 
+import sk.suchac.hbe.db.DAO;
 import sk.suchac.hbe.objects.SearchOrder;
 import android.app.Activity;
 import android.content.Intent;
@@ -25,8 +26,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 
 public class SearchActivity extends Activity {
 	
@@ -40,6 +41,8 @@ public class SearchActivity extends Activity {
 	CheckBox bibleWhole;
 	CheckBox oldTestament;
 	CheckBox newTestament;
+	
+	private DAO datasource;
 	
 	private static Resources resources;
 	
@@ -59,10 +62,14 @@ public class SearchActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 		resources = getResources();
+		
+		datasource = new DAO(this);
+		datasource.open();
+		
 		initializeElements();
 		
 		final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-			android.R.layout.simple_list_item_multiple_choice, resources.getStringArray(R.array.books_array)) {
+			android.R.layout.simple_list_item_multiple_choice, datasource.getBookTitleArray()) {
 			@Override
 	        public View getView(int position, View convertView,
 	                ViewGroup parent) {
@@ -84,6 +91,7 @@ public class SearchActivity extends Activity {
 		searchList.setOnItemClickListener(searchListListener);
 		
 		bibleWhole.performClick();
+		datasource.close();
 	}
 
 	@Override
@@ -301,6 +309,14 @@ public class SearchActivity extends Activity {
 		if (searchString.compareTo("") == 0) {
 			return false;
 		}
+		if (searchString.indexOf("*") != -1) {
+			Toast toast = Toast.makeText(getApplicationContext(), 
+					resources.getString(R.string.search_string_invalid_characters),
+					Toast.LENGTH_SHORT);
+		    	toast.show();
+			return false;
+		}
+		
 		int letters = searchString.length();
 		if (letters < SEARCH_STRING_MIN_LETTERS || letters > SEARCH_STRING_MAX_LETTERS) {
 			Toast toast = Toast.makeText(getApplicationContext(), 

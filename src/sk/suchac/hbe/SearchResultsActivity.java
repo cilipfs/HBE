@@ -1,25 +1,15 @@
 package sk.suchac.hbe;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
+import sk.suchac.hbe.db.DAO;
+import sk.suchac.hbe.objects.Book;
 import sk.suchac.hbe.objects.ScripturePosition;
 import sk.suchac.hbe.objects.SearchOrder;
 import sk.suchac.hbe.objects.SearchResult;
-import sk.suchac.hbe.parser.SearchXmlHandler;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,6 +30,8 @@ public class SearchResultsActivity extends Activity {
 	private LinearLayout background;
 	private ProgressBar progressBar;
 	private LinearLayout resultsContainer;
+	
+	private DAO datasource;
 	
 	private static Resources resources;
 	
@@ -65,8 +57,10 @@ public class SearchResultsActivity extends Activity {
 		Intent intent = getIntent();
 		order = (SearchOrder) intent.getSerializableExtra(SearchActivity.INTENT_SEARCH_ORDER);
 		
-		new SearchTask().execute();
+		datasource = new DAO(this);
+		datasource.open();
 		
+		new SearchTask().execute();
 	}
 
 	@Override
@@ -118,37 +112,10 @@ public class SearchResultsActivity extends Activity {
         protected Void doInBackground(Void... params) {
         	ArrayList<Integer> orderBookIds = order.getBookIds();
      		String searchString = order.getSearchString();
-        	 
-        	for (int i = 0; i < orderBookIds.size(); i++) {
-				int bookId = orderBookIds.get(i);
-					
-				InputSource source = getInputSourceForBible(bookId);
-				SearchXmlHandler handler = new SearchXmlHandler(bookId, searchString);
-				SAXParserFactory factoryImpl = SAXParserFactory.newInstance();
-				factoryImpl.setNamespaceAware(true);
-				SAXParser parser = null;
-				try {
-					parser = factoryImpl.newSAXParser();
-					try {
-						parser.parse(source, handler);
-					} catch (SAXException e) {
-						// log
-					} catch (IOException e) {
-						// log
-					}
-				} catch (ParserConfigurationException e) {
-					// log
-				} catch (SAXException e) {
-					// log
-				}
-				
-				int progress = ((i + 1) * 100) / orderBookIds.size();
-				progressBar.setProgress(progress);
-				
-				allResults.addAll(handler.getResults());
-			}
         	
-        	return null;
+     		allResults.addAll(datasource.getSearchResults(orderBookIds, searchString));
+        	
+			return null;
         }
         
         protected void onPostExecute(Void result) {
@@ -225,6 +192,8 @@ public class SearchResultsActivity extends Activity {
      	    	 resultsContainer.addView(linLayout);
         	 }
         	 
+        	 datasource.close();
+        	 
         	 if (isNightMode()) {
              	applyNightMode();
              } else {
@@ -233,24 +202,9 @@ public class SearchResultsActivity extends Activity {
         }          
     } 
 	
-	private InputSource getInputSourceForBible(int bookIndex) {
-		AssetManager assetManager = getAssets();
-		InputSource inputSource = null;
-		InputStream inputStream = null;
-		try {
-			inputStream = assetManager.open(bookIndex + ".xml");
-			inputSource = new InputSource(inputStream);
-		} catch (FileNotFoundException e) {
-			// log
-		} catch (IOException e) {
-			// log
-		}
-		return inputSource;
-	}
-	
 	private String getBookAbbreviation(int bookId) {
- 	   	String[] bookAbbrevs = resources.getStringArray(R.array.books_abbreviations_array);
- 	   	return bookAbbrevs[bookId];
+		Book book = datasource.getBook(bookId + 1);
+ 	   	return book.getAbbreviation();
 	}
 	
 	private boolean isNightMode() {
