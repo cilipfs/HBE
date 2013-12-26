@@ -143,7 +143,10 @@ public class DBHelper extends SQLiteOpenHelper {
 			myDataBase.close();
 		}
 		super.close();
-
+	}
+	
+	public boolean isOpen() {
+		return myDataBase.isOpen();
 	}
 
 	@Override

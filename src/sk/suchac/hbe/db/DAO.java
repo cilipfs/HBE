@@ -37,6 +37,10 @@ public class DAO {
 	  public void close() {
 		  dbHelper.close();
 	  }
+	  
+	  public boolean isOpen() {
+		  return dbHelper.isOpen();
+	  }
 
 	  public Chapter getChapter(int bookId, int number) {
 		  String[] args = { Integer.toString(bookId), Integer.toString(number) };
@@ -83,15 +87,29 @@ public class DAO {
 		  cursor.close();
 		  
 		  for (Book b : books) {
-			  String countQuery = "SELECT  COUNT(*) FROM CHAPTER WHERE BOOK_ID=" + b.get_id();
-		      cursor = database.rawQuery(countQuery, null);
-		      cursor.moveToFirst();
-		      int count = cursor.getInt(0);
+		      int count = getTotalChaptersOfBook(b.get_id());
 		      b.setTotalChapters(count);
-		      cursor.close();
 		  }
 		  
 		  return books;
+	  }
+	  
+	  public String[] getBookTitleArray() {
+		  List<String> books = new ArrayList<String>();
+		  Cursor cursor = database.query("BOOK",
+				allBookColumns, null, null, null, null, null);
+		  cursor.moveToFirst();
+		  while (!cursor.isAfterLast()) {
+			  Book book = cursorToBook(cursor);
+		      books.add(book.getTitle());
+		      cursor.moveToNext();
+		  }
+		  cursor.close();
+		  
+		  String[] array = new String[books.size()];
+		  books.toArray(array);
+		  
+		  return array;
 	  }
 	  
 	  public Book getBook(int bookId) {

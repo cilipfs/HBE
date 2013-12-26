@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -152,12 +151,14 @@ private class UpdateDBTask extends AsyncTask<Void, Void, Void> {
             buttonPick.setEnabled(false);
             
             AlertDialog.Builder builder = new AlertDialog.Builder(thisActivity);
-            builder.setItems(R.array.books_array, new DialogInterface.OnClickListener() {
+            builder.setItems(datasource.getBookTitleArray(), new DialogInterface.OnClickListener() {
             	public void onClick(DialogInterface dialog, int which) {
-            		setPickedBook(which);
+        			datasource.open();
+        			setPickedBook(which);
             		setPickedChapter(0);	// set first chapter (0) after picking book
             		buttonPick.setEnabled(true);
             		buildChaptersDialog();
+        			datasource.close();
             	}
             });
             bookDialog = builder.create();
@@ -209,9 +210,7 @@ private class UpdateDBTask extends AsyncTask<Void, Void, Void> {
 	}
 	
 	private String[] getChaptersForBook(int bookId) {
-		Resources res = getResources();
- 	   	int[] totalChapters = res.getIntArray(R.array.total_chapters_array);
- 	   	int totalChaptersForBook = totalChapters[bookId];
+ 	   	int totalChaptersForBook = datasource.getTotalChaptersOfBook(bookId + 1);
 		String[] chapters = new String[totalChaptersForBook];
 		for (int i = 0; i < totalChaptersForBook; i++) {
 			chapters[i] = String.valueOf(i + 1);
@@ -220,9 +219,7 @@ private class UpdateDBTask extends AsyncTask<Void, Void, Void> {
 	}
 	
 	private String getButtonBookText(int bookId) {
-		Resources res = getResources();
- 	   	String[] books = res.getStringArray(R.array.books_array);
- 	   	return books[bookId];
+ 	   	return datasource.getBook(bookId + 1).getTitle();
 	}
 	
 	private void buildChaptersDialog() {
