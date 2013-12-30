@@ -147,7 +147,7 @@ public class DAO {
 			  }
 		  }
 		  query.append(") as book JOIN CHAPTER as chapter ON book._id=chapter.BOOK_ID JOIN VERSE as verse ON chapter._id=verse.CHAPTER_ID WHERE TEXT LIKE ?");
-	      
+		  
 		  Cursor cursor = database.rawQuery(query.toString(), new String[] {"%" + searchString + "%"});
 	      cursor.moveToFirst();
 	      while (!cursor.isAfterLast()) {
@@ -189,6 +189,7 @@ public class DAO {
 		  SearchResult sr = new SearchResult();
 		  sr.setBookId(cursor.getInt(0) - 1);
 		  sr.setChapterId(cursor.getInt(1) - 1);
+		  sr.setVerseNumber(cursor.getInt(2));
 		  sr.setSample("<b>" + cursor.getString(2) + "</b>" + " " + cursor.getString(3));	// TODO spravit nejaky formater tychto veci
 		  return sr;
 	  }

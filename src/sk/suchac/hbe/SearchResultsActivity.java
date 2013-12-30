@@ -1,12 +1,14 @@
 package sk.suchac.hbe;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import sk.suchac.hbe.db.DAO;
 import sk.suchac.hbe.objects.Book;
 import sk.suchac.hbe.objects.ScripturePosition;
 import sk.suchac.hbe.objects.SearchOrder;
 import sk.suchac.hbe.objects.SearchResult;
+import sk.suchac.hbe.objects.SearchResultComparator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -43,6 +45,8 @@ public class SearchResultsActivity extends Activity {
 	SearchOrder order = new SearchOrder();
 	
 	private static final int MAX_RESULTS_DISPLAY = 100;
+	
+	long startTime;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +64,7 @@ public class SearchResultsActivity extends Activity {
 		datasource = new DAO(this);
 		datasource.open();
 		
+		startTime = System.nanoTime();
 		new SearchTask().execute();
 	}
 
@@ -119,7 +124,7 @@ public class SearchResultsActivity extends Activity {
         }
         
         protected void onPostExecute(Void result) {
-        	 // update
+        	 Collections.sort(allResults, new SearchResultComparator());
         	 progressBar.setVisibility(View.GONE);
         	 
         	 if (allResults.size() == 0) {
@@ -199,8 +204,11 @@ public class SearchResultsActivity extends Activity {
              } else {
              	applyDayMode();
              }
-        }          
-    } 
+        	 
+//        	 long estimatedTime = System.nanoTime() - startTime;
+//        	 Log.i(SearchResultsActivity.class.getName(), "Elapsed time of search: " + TimeUnit.MILLISECONDS.convert(estimatedTime, TimeUnit.NANOSECONDS));
+        }
+    }
 	
 	private String getBookAbbreviation(int bookId) {
 		Book book = datasource.getBook(bookId + 1);
