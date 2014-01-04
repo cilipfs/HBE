@@ -168,6 +168,14 @@ public class SearchActivity extends Activity {
 					}
 				}
 				
+				if (bookIds.size() == 0) {
+					Toast toast = Toast.makeText(getApplicationContext(), 
+			    			getResources().getString(R.string.search_no_books_picked), 
+			    			Toast.LENGTH_SHORT);
+			    	toast.show();
+			    	return;
+				}
+				
 				SearchOrder order = new SearchOrder(searchString, bookIds);
 				Intent intent = new Intent(thisActivity, SearchResultsActivity.class);
 			    intent.putExtra(INTENT_SEARCH_ORDER, order);
