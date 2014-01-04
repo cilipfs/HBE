@@ -15,7 +15,7 @@ import android.util.Log;
 public class DBHelper extends SQLiteOpenHelper {
 
 	private static String DB_NAME = "hbedb";
-	private static final int DB_VERSION = 2;
+	private static final int DB_VERSION = 11;
 
 	private SQLiteDatabase myDataBase;
 
