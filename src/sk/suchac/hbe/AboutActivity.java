@@ -1,10 +1,14 @@
 package sk.suchac.hbe;
 
+import java.util.List;
+
+import sk.suchac.hbe.db.DAO;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +22,8 @@ public class AboutActivity extends Activity {
 	private TextView tvAbout3;
 	private TextView tvAboutDescription;
 	
+	private DAO datasource;
+	
 	private Resources resources;
 	
 	public static final String PREFS = "HbePrefsFile";
@@ -27,8 +33,20 @@ public class AboutActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
+		
+		datasource = new DAO(this);
+		datasource.open();
+		
 		initializeElements();
 		resources = getResources();
+		
+		List<String> abouts = datasource.getAbout();
+		tvAbout1.setText(abouts.get(0));
+		tvAbout2.setText(abouts.get(1));
+		tvAbout3.setText(abouts.get(2));
+		tvAboutDescription.setText(Html.fromHtml(abouts.get(3)));
+		
+		datasource.close();
 	}
 
 	@Override

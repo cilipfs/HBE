@@ -66,9 +66,5 @@
     <string name="setting_fontSize_summ">Veľkosť písma biblického textu</string>
     <string name="title_activity_about">O preklade</string>
     <string name="about_activity_option">O preklade</string>
-    <string name="about_text1">Slovenský ekumenický preklad</string>
-    <string name="about_text2">© Slovenská biblická spoločnosť, 2008</string>
-    <string name="about_text3">www.biblickaspolocnost.sk</string>
-    <string name="about_description">Preklad sa realizoval v rokoch 1990 - 2007.\nNa prácach pri vydaní Biblie sa zúčastňovali zástupcovia členských cirkví SBS (v abecednom poradí): Apoštolská cirkev na Slovensku, Bratská jednota baptistov, Cirkev adventistov siedmeho dňa, Cirkev bratská, Evanjelická cirkev augsburského vyznania, Evanjelická cirkev metodistická, Gréckokatolícka cirkev, Pravoslávna cirkev, Reformovaná kresťanská cirkev, Rímskokatolícka cirkev.\n\nPrácu prekladateľskej skupiny Starej Zmluvy viedol prof. ThDr. Juraj Bándy.\nPrácu prekladateľskej skupiny Novej Zmluvy viedol doc. ThDr. Ján Grešo.\n\nText bol schválený Konferenciou biskupov Slovenska dňa 27.3.2008, č. 9-K/08.</string>
-
+    
 </resources>

@@ -22,6 +22,7 @@ public class DAO {
 		      "TITLE", "ABBREVIATION" };
 	  private String[] allVerseColumns = { "_id",
 		      "CHAPTER_ID", "NUMBER", "TEXT" };
+	  //private String[] allAboutColumns = { "_id", "TEXT" };
 
 	  public DAO(Context context) {
 		  dbHelper = new DBHelper(context);
@@ -158,6 +159,20 @@ public class DAO {
 		  cursor.close();
 		  
 		  return results;
+	  }
+	  
+	  public List<String> getAbout() {
+		  List<String> about = new ArrayList<String>();
+		  String query = "SELECT * FROM ABOUT";
+	      Cursor cursor = database.rawQuery(query, null);
+	      cursor.moveToFirst();
+	      while (!cursor.isAfterLast()) {
+		      about.add(cursor.getString(1));
+		      cursor.moveToNext();
+		  }
+	      cursor.close();
+		  
+		  return about;
 	  }
 
 	  private Chapter cursorToChapter(Cursor cursor) {

@@ -33,8 +33,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_weight="100"
                 android:minHeight="36dp"
-                android:onClick="displayAbout"
-                android:text="@string/about_text1" />
+                android:onClick="displayAbout" />
 
         </LinearLayout>
     </ScrollView>

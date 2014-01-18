@@ -25,6 +25,7 @@ public class ScriptureActivity extends Activity {
 	private Button buttonPrevious;
 	private Button buttonNext;
 	private View background;
+	private Button buttonAbout;
 	
 	private DAO datasource;
 	
@@ -56,6 +57,9 @@ public class ScriptureActivity extends Activity {
 		
 		buttonPrevious = (Button) findViewById(R.id.button_previous);
 		buttonNext = (Button) findViewById(R.id.button_next);
+		
+		buttonAbout = (Button) findViewById(R.id.buttonAbout);
+		buttonAbout.setText(datasource.getAbout().get(0));
 		
 		Intent intent = getIntent();
 		scriptPosition = (ScripturePosition) intent.getSerializableExtra(MainActivity.INTENT_SCRIPTURE_POSITION);
