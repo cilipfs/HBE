@@ -9,6 +9,7 @@ import sk.suchac.hbe.objects.Verse;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.Menu;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ScriptureActivity extends Activity {
 	
@@ -26,8 +28,10 @@ public class ScriptureActivity extends Activity {
 	private Button buttonNext;
 	private View background;
 	private Button buttonAbout;
+	private Button buttonSeb;
 	
 	private DAO datasource;
+	private boolean scriptureDisplayed = false;
 	
 	public static final String PREFS = "HbePrefsFile";
 	private static boolean nightMode;
@@ -53,25 +57,22 @@ public class ScriptureActivity extends Activity {
 		
 		background = findViewById(R.id.scripture_layout);
 		textField = (TextView) findViewById(R.id.textView);
-		textField.setText("");
 		
 		buttonPrevious = (Button) findViewById(R.id.button_previous);
 		buttonNext = (Button) findViewById(R.id.button_next);
 		
 		buttonAbout = (Button) findViewById(R.id.buttonAbout);
 		buttonAbout.setText(datasource.getAbout().get(0));
+		buttonSeb = (Button) findViewById(R.id.button_seb);
 		
 		Intent intent = getIntent();
 		scriptPosition = (ScripturePosition) intent.getSerializableExtra(MainActivity.INTENT_SCRIPTURE_POSITION);
 		
-		chapter = datasource.getChapter(scriptPosition.getBook() + 1, scriptPosition.getChapter() + 1);
-		displayScriptureText();
-		HistoryHelper.saveRecord(thisActivity, scriptPosition.getBook(), scriptPosition.getChapter());
-		
 		calculatePreviousAndNextChapter();
 		setPreviousAndNextButtonText();
-        
-		datasource.close();
+		
+		disableButtons();
+		new DisplayScriptureTask().execute();
 	}
 
 	@Override
@@ -106,6 +107,13 @@ public class ScriptureActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		if (!scriptureDisplayed) {
+			Toast toast = Toast.makeText(getApplicationContext(), 
+	    			getResources().getString(R.string.displaying_so_wait), 
+	    			Toast.LENGTH_SHORT);
+	    	toast.show();
+			return true;
+		}
 		switch (item.getItemId()) {
 			case R.id.night_day_mode:
 	    		switchNightDayMode();
@@ -140,16 +148,50 @@ public class ScriptureActivity extends Activity {
 		    applyNightMode();
         }
 	}
+	
+	private void disableButtons() {
+		buttonPrevious.setEnabled(false);
+        buttonNext.setEnabled(false);
+        buttonAbout.setEnabled(false);
+        buttonSeb.setEnabled(false);
+	}
+	
+	private void enableButtons() {
+		buttonPrevious.setEnabled(true);
+        buttonNext.setEnabled(true);
+        buttonAbout.setEnabled(true);
+        buttonSeb.setEnabled(true);
+	}
+	
+	private class DisplayScriptureTask extends AsyncTask<Void, Void, Void> {
+		private String scriptureText = "";
+		
+        @Override
+        protected Void doInBackground(Void... params) {
+        	chapter = datasource.getChapter(scriptPosition.getBook() + 1, scriptPosition.getChapter() + 1);
+        	scriptureText = getScriptureText();
+        	return null;
+        }
+        
+        protected void onPostExecute(Void result) {
+        	 // update
+        	thisActivity.setTitle(chapter.getBook().getAbbreviation() + " " + chapter.getNumber());
+        	enableButtons();
+        	textField.setText(Html.fromHtml(scriptureText));
+    		HistoryHelper.saveRecord(thisActivity, scriptPosition.getBook(), scriptPosition.getChapter());
+            datasource.close();
+            scriptureDisplayed = true;
+        }          
+    }
 
-	private void displayScriptureText() {
+	private String getScriptureText() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<b>" + chapter.getBook().getTitle() + " " + chapter.getNumber() + "</b><br />");
 		for (Verse verse : chapter.getVerses()) {
 			sb.append("<br/><b>" + verse.getNumber() + "</b><br />" + verse.getText());
 		}
 		sb.append("<br />");
-		textField.append(Html.fromHtml(sb.toString()));
-		this.setTitle(chapter.getBook().getAbbreviation() + " " + chapter.getNumber());
+		return sb.toString();
 	}
 	
 	private void calculatePreviousAndNextChapter() {
