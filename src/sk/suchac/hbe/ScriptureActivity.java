@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,7 @@ public class ScriptureActivity extends Activity {
 	private View background;
 	private Button buttonAbout;
 	private Button buttonSeb;
+	private ProgressBar progressBar;
 	
 	private DAO datasource;
 	private boolean scriptureDisplayed = false;
@@ -65,13 +67,15 @@ public class ScriptureActivity extends Activity {
 		buttonAbout.setText(datasource.getAbout().get(0));
 		buttonSeb = (Button) findViewById(R.id.button_seb);
 		
+		progressBar = (ProgressBar) findViewById(R.id.scripture_progressBar);
+		
 		Intent intent = getIntent();
 		scriptPosition = (ScripturePosition) intent.getSerializableExtra(MainActivity.INTENT_SCRIPTURE_POSITION);
 		
 		calculatePreviousAndNextChapter();
 		setPreviousAndNextButtonText();
 		
-		disableButtons();
+		hideButtons();
 		new DisplayScriptureTask().execute();
 	}
 
@@ -149,18 +153,18 @@ public class ScriptureActivity extends Activity {
         }
 	}
 	
-	private void disableButtons() {
-		buttonPrevious.setEnabled(false);
-        buttonNext.setEnabled(false);
-        buttonAbout.setEnabled(false);
-        buttonSeb.setEnabled(false);
+	private void hideButtons() {
+		buttonPrevious.setVisibility(View.INVISIBLE);
+        buttonNext.setVisibility(View.INVISIBLE);
+        buttonAbout.setVisibility(View.INVISIBLE);
+        buttonSeb.setVisibility(View.INVISIBLE);
 	}
 	
-	private void enableButtons() {
-		buttonPrevious.setEnabled(true);
-        buttonNext.setEnabled(true);
-        buttonAbout.setEnabled(true);
-        buttonSeb.setEnabled(true);
+	private void showButtons() {
+		buttonPrevious.setVisibility(View.VISIBLE);
+        buttonNext.setVisibility(View.VISIBLE);
+        buttonAbout.setVisibility(View.VISIBLE);
+        buttonSeb.setVisibility(View.VISIBLE);
 	}
 	
 	private class DisplayScriptureTask extends AsyncTask<Void, Void, Void> {
@@ -176,8 +180,9 @@ public class ScriptureActivity extends Activity {
         protected void onPostExecute(Void result) {
         	 // update
         	thisActivity.setTitle(chapter.getBook().getAbbreviation() + " " + chapter.getNumber());
-        	enableButtons();
+        	showButtons();
         	textField.setText(Html.fromHtml(scriptureText));
+        	progressBar.setVisibility(View.GONE);
     		HistoryHelper.saveRecord(thisActivity, scriptPosition.getBook(), scriptPosition.getChapter());
             datasource.close();
             scriptureDisplayed = true;

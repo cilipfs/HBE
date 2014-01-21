@@ -19,7 +19,7 @@
     <string name="night_day_mode_title">Nočný/denný režim</string>
     <string name="title_updating">Aktualizujem...</string>
     <string name="updating_so_wait">Počkajte na dokončenie aktualizácie</string>
-    <string name="scripture_loading">Načítavam...</string>
+    <string name="scripture_loading">Načítavam...\n</string>
     <string name="displaying_so_wait">Počkajte na zobrazenie textu</string>
 
     <color name="night_back">#222222</color>
