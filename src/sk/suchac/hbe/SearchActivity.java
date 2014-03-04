@@ -346,8 +346,7 @@ public class SearchActivity extends Activity {
 	
 	private void applyNightMode() {
 		background.setBackgroundColor(resources.getColor(R.color.night_back));
-		textInput.setTextColor(resources.getColor(R.color.night_text));
-		textInput.setBackgroundColor(resources.getColor(R.color.night_back));
+		textInput.setBackgroundColor(resources.getColor(R.color.night_text));
 		bibleWhole.setTextColor(resources.getColor(R.color.night_text));
 		oldTestament.setTextColor(resources.getColor(R.color.night_text));
 		newTestament.setTextColor(resources.getColor(R.color.night_text));
@@ -360,8 +359,7 @@ public class SearchActivity extends Activity {
 	
 	private void applyDayMode() {
 		background.setBackgroundColor(resources.getColor(R.color.day_back));
-		textInput.setTextColor(resources.getColor(R.color.day_text));
-		textInput.setBackgroundColor(resources.getColor(R.color.day_back));
+		textInput.setBackgroundColor(resources.getColor(R.color.night_text));
 		bibleWhole.setTextColor(resources.getColor(R.color.day_text));
 		oldTestament.setTextColor(resources.getColor(R.color.day_text));
 		newTestament.setTextColor(resources.getColor(R.color.day_text));
