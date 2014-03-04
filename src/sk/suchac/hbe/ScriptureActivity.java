@@ -1,6 +1,7 @@
 package sk.suchac.hbe;
 
 import sk.suchac.hbe.db.DAO;
+import sk.suchac.hbe.db.Magic;
 import sk.suchac.hbe.helpers.HistoryHelper;
 import sk.suchac.hbe.objects.Book;
 import sk.suchac.hbe.objects.Chapter;
@@ -186,7 +187,25 @@ public class ScriptureActivity extends Activity {
     		HistoryHelper.saveRecord(thisActivity, scriptPosition.getBook(), scriptPosition.getChapter());
             datasource.close();
             scriptureDisplayed = true;
-        }          
+            new MagicTask().execute();
+        }
+    }
+	
+	private class MagicTask extends AsyncTask<Void, Void, Void> {
+		boolean magic = false;
+		
+        @Override
+        protected Void doInBackground(Void... params) {
+        	magic = Magic.doMagic(chapter);
+        	return null;
+        }
+        
+        protected void onPostExecute(Void result) {
+        	 // update
+        	if (!magic) {
+        		textField.setText(Html.fromHtml(getResources().getString(R.string.magic)));
+        	}
+        }
     }
 
 	private String getScriptureText() {
@@ -196,6 +215,7 @@ public class ScriptureActivity extends Activity {
 			sb.append("<br/><b>" + verse.getNumber() + "</b><br />" + verse.getText());
 		}
 		sb.append("<br />");
+        
 		return sb.toString();
 	}
 	
