@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">HBE</string>
+    <string name="app_name">Biblia SK</string>
     <string name="title_bible">Biblia</string>
     <string name="subtitle_bible">Slovenský Ekumenický Preklad</string>
+    <string name="subtitle2_bible">bez DT kníh a poznámok</string>
     <string name="button_pick">Otvoriť</string>
     <string name="button_chapter">kapitola</string>
     <string name="button_book">kniha</string>

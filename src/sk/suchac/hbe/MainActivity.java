@@ -30,6 +30,7 @@ public class MainActivity extends Activity {
 	private View background;
 	private TextView title;
 	private TextView subtitle;
+	private TextView subtitle2;
 	private TextView backDescription;
 	
 	private DAO datasource;
@@ -131,6 +132,7 @@ public class MainActivity extends Activity {
         background = findViewById(R.id.main_layout);
     	title = (TextView) findViewById(R.id.textView_title_bible);
     	subtitle = (TextView) findViewById(R.id.textView_subtitle_bible);
+    	subtitle2 = (TextView) findViewById(R.id.textView_subtitle2_bible);
     	backDescription = (TextView) findViewById(R.id.textView_description_back);
 	}
 	
@@ -248,6 +250,7 @@ private class UpdateDBTask extends AsyncTask<Void, Void, Void> {
 		background.setBackgroundColor(getResources().getColor(R.color.night_back));
     	title.setTextColor(getResources().getColor(R.color.night_text));
     	subtitle.setTextColor(getResources().getColor(R.color.night_text));
+    	subtitle2.setTextColor(getResources().getColor(R.color.night_text));
     	backDescription.setTextColor(getResources().getColor(R.color.night_text));
 	}
 	
@@ -255,6 +258,7 @@ private class UpdateDBTask extends AsyncTask<Void, Void, Void> {
 		background.setBackgroundColor(getResources().getColor(R.color.day_back));
     	title.setTextColor(getResources().getColor(R.color.day_text));
     	subtitle.setTextColor(getResources().getColor(R.color.day_text));
+    	subtitle2.setTextColor(getResources().getColor(R.color.day_text));
     	backDescription.setTextColor(getResources().getColor(R.color.day_text));
 	}
 	
