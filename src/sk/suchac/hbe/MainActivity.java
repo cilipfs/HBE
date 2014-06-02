@@ -1,6 +1,7 @@
 package sk.suchac.hbe;
 
 import sk.suchac.hbe.db.DAO;
+import sk.suchac.hbe.helpers.PreferencesHelper;
 import sk.suchac.hbe.objects.ScripturePosition;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -37,7 +38,6 @@ public class MainActivity extends Activity {
 	
 	private boolean updateDbDone = false;
 	
-	public static final String PREFS = "HbePrefsFile";
 	private static boolean nightMode;
 	
 	public final static String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
@@ -241,7 +241,7 @@ private class UpdateDBTask extends AsyncTask<Void, Void, Void> {
 	}
 	
 	private boolean isNightMode() {
-		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.PREFS, 0);
         nightMode = settings.getBoolean("nightMode", false);
 		return nightMode;
 	}
@@ -263,7 +263,7 @@ private class UpdateDBTask extends AsyncTask<Void, Void, Void> {
 	}
 	
 	private void saveNightModeState(boolean night) {
-		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.PREFS, 0);
 	    SharedPreferences.Editor editor = settings.edit();
 	    editor.putBoolean("nightMode", night);
 	    editor.commit();

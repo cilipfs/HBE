@@ -3,6 +3,7 @@ package sk.suchac.hbe;
 import java.util.ArrayList;
 
 import sk.suchac.hbe.db.DAO;
+import sk.suchac.hbe.helpers.PreferencesHelper;
 import sk.suchac.hbe.objects.SearchOrder;
 import android.app.Activity;
 import android.content.Intent;
@@ -46,7 +47,6 @@ public class SearchActivity extends Activity {
 	
 	private static Resources resources;
 	
-	public static final String PREFS = "HbePrefsFile";
 	private static boolean nightMode;
 	
 	private static final int OLD_TESTAMENT_BOOKS = 39;
@@ -339,7 +339,7 @@ public class SearchActivity extends Activity {
 	}
 	
 	private boolean isNightMode() {
-		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.PREFS, 0);
         nightMode = settings.getBoolean("nightMode", false);
 		return nightMode;
 	}
@@ -371,7 +371,7 @@ public class SearchActivity extends Activity {
 	}
 	
 	private void saveNightModeState(boolean night) {
-		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.PREFS, 0);
 	    SharedPreferences.Editor editor = settings.edit();
 	    editor.putBoolean("nightMode", night);
 	    editor.commit();

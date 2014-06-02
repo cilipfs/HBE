@@ -4,6 +4,7 @@ import java.util.List;
 
 import sk.suchac.hbe.db.DAO;
 import sk.suchac.hbe.helpers.HistoryHelper;
+import sk.suchac.hbe.helpers.PreferencesHelper;
 import sk.suchac.hbe.objects.Book;
 import sk.suchac.hbe.objects.HistoryRecord;
 import sk.suchac.hbe.objects.ScripturePosition;
@@ -32,7 +33,6 @@ public class HistoryActivity extends Activity {
 	private DAO datasource;
 	
 	public final static String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
-	public static final String PREFS = "HbePrefsFile";
 	private static boolean nightMode;
 	
 	private static Resources resources;
@@ -142,7 +142,7 @@ public class HistoryActivity extends Activity {
 	}
 	
 	private boolean isNightMode() {
-		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.PREFS, 0);
         nightMode = settings.getBoolean("nightMode", false);
 		return nightMode;
 	}
@@ -174,7 +174,7 @@ public class HistoryActivity extends Activity {
 	}
 	
 	private void saveNightModeState(boolean night) {
-		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.PREFS, 0);
 	    SharedPreferences.Editor editor = settings.edit();
 	    editor.putBoolean("nightMode", night);
 	    editor.commit();

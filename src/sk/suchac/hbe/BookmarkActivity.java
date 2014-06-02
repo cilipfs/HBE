@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import sk.suchac.hbe.db.DAO;
+import sk.suchac.hbe.helpers.PreferencesHelper;
 import sk.suchac.hbe.objects.Book;
 import sk.suchac.hbe.objects.Bookmark;
 import sk.suchac.hbe.objects.BookmarkComparator;
@@ -46,11 +47,9 @@ public class BookmarkActivity extends Activity {
 	
 	private static Resources resources;
 	
-	public static final String PREFS = "HbePrefsFile";
 	private static boolean nightMode;
 	
 	public static final String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
-	public static final String INT_STORE_PREFS = "HbeBookmarkPrefs";
 	public static final int MAX_BOOKMARKS = 20;
 
 	@Override
@@ -140,7 +139,7 @@ public class BookmarkActivity extends Activity {
 	private OnClickListener buttonAddBookmarkListener = new OnClickListener() {
 	    public void onClick(View v) {
 	    	datasource.open();
-	    	SharedPreferences settings = getSharedPreferences(INT_STORE_PREFS, 0);
+	    	SharedPreferences settings = getSharedPreferences(PreferencesHelper.INT_STORE_PREFS, 0);
 	    	if (settings.getAll().size() == MAX_BOOKMARKS) {
 	    		createDialogTooManyBookmarks().show();
 	    		return;
@@ -171,7 +170,7 @@ public class BookmarkActivity extends Activity {
 	};
 	
 	private void clearBookmarks() {
-		SharedPreferences settings = getSharedPreferences(INT_STORE_PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.INT_STORE_PREFS, 0);
 	    SharedPreferences.Editor editor = settings.edit();
 	    editor.clear();
 	    editor.commit();
@@ -180,7 +179,7 @@ public class BookmarkActivity extends Activity {
 	private void displayBookmarks() {
 		bookmarkTable.removeAllViews();
 		
-		SharedPreferences settings = getSharedPreferences(INT_STORE_PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.INT_STORE_PREFS, 0);
 		Map<String,?> internal = settings.getAll();
 		Object[] values = internal.values().toArray();
 		List<Bookmark> bmList = castBmObjectsToList(values);
@@ -263,14 +262,14 @@ public class BookmarkActivity extends Activity {
 	private void actualizeBookmark(long timestamp) {
 		Bookmark bookmark = new Bookmark(timestamp, scriptPosition.getBook(),
 				scriptPosition.getChapter());
-		SharedPreferences settings = getSharedPreferences(INT_STORE_PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.INT_STORE_PREFS, 0);
 	    SharedPreferences.Editor editor = settings.edit();
 	    editor.putString(String.valueOf(timestamp), bookmark.toString());
 	    editor.commit();
 	}
 	
 	private void deleteBookmark(long timestamp) {
-		SharedPreferences settings = getSharedPreferences(INT_STORE_PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.INT_STORE_PREFS, 0);
 	    SharedPreferences.Editor editor = settings.edit();
 	    editor.remove(String.valueOf(timestamp));
 	    editor.commit();
@@ -370,7 +369,7 @@ public class BookmarkActivity extends Activity {
 	}
 	
 	private boolean isNightMode() {
-		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.PREFS, 0);
         nightMode = settings.getBoolean("nightMode", false);
 		return nightMode;
 	}
@@ -402,7 +401,7 @@ public class BookmarkActivity extends Activity {
 	}
 	
 	private void saveNightModeState(boolean night) {
-		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.PREFS, 0);
 	    SharedPreferences.Editor editor = settings.edit();
 	    editor.putBoolean("nightMode", night);
 	    editor.commit();

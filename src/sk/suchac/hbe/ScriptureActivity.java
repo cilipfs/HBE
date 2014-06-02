@@ -3,6 +3,7 @@ package sk.suchac.hbe;
 import sk.suchac.hbe.db.DAO;
 import sk.suchac.hbe.db.Magic;
 import sk.suchac.hbe.helpers.HistoryHelper;
+import sk.suchac.hbe.helpers.PreferencesHelper;
 import sk.suchac.hbe.objects.Book;
 import sk.suchac.hbe.objects.Chapter;
 import sk.suchac.hbe.objects.ScripturePosition;
@@ -36,9 +37,7 @@ public class ScriptureActivity extends Activity {
 	private DAO datasource;
 	private boolean scriptureDisplayed = false;
 	
-	public static final String PREFS = "HbePrefsFile";
 	private static boolean nightMode;
-	public static final String SETTINGS_PREFS = "HbeSettingsPrefs";
 	
 	public final static String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
 	ScripturePosition scriptPosition = new ScripturePosition();
@@ -106,7 +105,7 @@ public class ScriptureActivity extends Activity {
     }
 
 	private void applyFontSize() {
-		SharedPreferences settings = getSharedPreferences(SETTINGS_PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.SETTINGS_PREFS, 0);
 		textField.setTextSize(settings.getInt("fontSize", 18));
 	}
 
@@ -308,12 +307,12 @@ public class ScriptureActivity extends Activity {
 	}
 	
 	private boolean isKeepScreenOn() {
-		SharedPreferences settings = getSharedPreferences(SETTINGS_PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.SETTINGS_PREFS, 0);
         return settings.getBoolean("keepScreenOn", false);
 	}
 	
 	private boolean isNightMode() {
-		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.PREFS, 0);
         nightMode = settings.getBoolean("nightMode", false);
 		return nightMode;
 	}
@@ -329,7 +328,7 @@ public class ScriptureActivity extends Activity {
 	}
 	
 	private void saveNightModeState(boolean night) {
-		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.PREFS, 0);
 	    SharedPreferences.Editor editor = settings.edit();
 	    editor.putBoolean("nightMode", night);
 	    editor.commit();

@@ -1,5 +1,6 @@
 package sk.suchac.hbe;
 
+import sk.suchac.hbe.helpers.PreferencesHelper;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -26,9 +27,7 @@ public class SettingsActivity extends Activity {
 	
 	private Resources resources;
 	
-	public static final String PREFS = "HbePrefsFile";
 	private static boolean nightMode;
-	public static final String SETTINGS_PREFS = "HbeSettingsPrefs";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +36,7 @@ public class SettingsActivity extends Activity {
 		initializeElements();
 		resources = getResources();
 		
-		SharedPreferences settings = getSharedPreferences(SETTINGS_PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.SETTINGS_PREFS, 0);
         cbKeepScreenOn.setChecked(settings.getBoolean("keepScreenOn", false));
         cbKeepScreenOn.setOnClickListener(keepScreenOnOnClickListener);
         
@@ -98,7 +97,7 @@ public class SettingsActivity extends Activity {
 	private OnClickListener keepScreenOnOnClickListener = new OnClickListener() {
 		@Override
 		public void onClick(View arg0) {
-			SharedPreferences settings = getSharedPreferences(SETTINGS_PREFS, 0);
+			SharedPreferences settings = getSharedPreferences(PreferencesHelper.SETTINGS_PREFS, 0);
 		    SharedPreferences.Editor editor = settings.edit();
 			if (cbKeepScreenOn.isChecked()) {
 			    editor.putBoolean("keepScreenOn", true);
@@ -122,7 +121,7 @@ public class SettingsActivity extends Activity {
         	public void onClick(DialogInterface dialog, int which) {
         		int picked = resources.getIntArray(R.array.font_size)[which];
         		btnFontSize.setText(String.valueOf(picked));
-        		SharedPreferences settings = getSharedPreferences(SETTINGS_PREFS, 0);
+        		SharedPreferences settings = getSharedPreferences(PreferencesHelper.SETTINGS_PREFS, 0);
     		    SharedPreferences.Editor editor = settings.edit();
     		    editor.putInt("fontSize", picked);
 			    editor.commit();
@@ -132,7 +131,7 @@ public class SettingsActivity extends Activity {
 	}
 	
 	private boolean isNightMode() {
-		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.PREFS, 0);
         nightMode = settings.getBoolean("nightMode", false);
 		return nightMode;
 	}
@@ -154,7 +153,7 @@ public class SettingsActivity extends Activity {
 	}
 	
 	private void saveNightModeState(boolean night) {
-		SharedPreferences settings = getSharedPreferences(PREFS, 0);
+		SharedPreferences settings = getSharedPreferences(PreferencesHelper.PREFS, 0);
 	    SharedPreferences.Editor editor = settings.edit();
 	    editor.putBoolean("nightMode", night);
 	    editor.commit();
