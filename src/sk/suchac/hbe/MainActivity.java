@@ -1,6 +1,7 @@
 package sk.suchac.hbe;
 
 import sk.suchac.hbe.db.DAO;
+import sk.suchac.hbe.helpers.IntentHelper;
 import sk.suchac.hbe.helpers.PreferencesHelper;
 import sk.suchac.hbe.objects.ScripturePosition;
 import android.app.Activity;
@@ -40,7 +41,6 @@ public class MainActivity extends Activity {
 	
 	private static boolean nightMode;
 	
-	public final static String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
 	ScripturePosition picked = new ScripturePosition();
 
     @Override
@@ -201,7 +201,7 @@ private class UpdateDBTask extends AsyncTask<Void, Void, Void> {
 	// onClick for buttonPick
 	public void showPickedScripture(View view) {
 		Intent intent = new Intent(this, ScriptureActivity.class);
-	    intent.putExtra(INTENT_SCRIPTURE_POSITION, picked);
+	    intent.putExtra(IntentHelper.INTENT_SCRIPTURE_POSITION, picked);
 	    startActivity(intent);
 	}
 	

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import sk.suchac.hbe.db.DAO;
+import sk.suchac.hbe.helpers.IntentHelper;
 import sk.suchac.hbe.helpers.PreferencesHelper;
 import sk.suchac.hbe.objects.Book;
 import sk.suchac.hbe.objects.Bookmark;
@@ -49,7 +50,6 @@ public class BookmarkActivity extends Activity {
 	
 	private static boolean nightMode;
 	
-	public static final String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
 	public static final int MAX_BOOKMARKS = 20;
 
 	@Override
@@ -64,7 +64,7 @@ public class BookmarkActivity extends Activity {
 		initializeElements();
 		
 		Intent intent = getIntent();
-		scriptPosition = (ScripturePosition) intent.getSerializableExtra(ScriptureActivity.INTENT_SCRIPTURE_POSITION);
+		scriptPosition = (ScripturePosition) intent.getSerializableExtra(IntentHelper.INTENT_SCRIPTURE_POSITION);
 		if (scriptPosition == null) {
 			enabledEditing = false;
 			buttonAddBookmark.setEnabled(false);
@@ -198,7 +198,7 @@ public class BookmarkActivity extends Activity {
 					Intent intent = new Intent(thisActivity, ScriptureActivity.class);
 				    ScripturePosition sp = new ScripturePosition(bookmark.getBookId(),
 				    		bookmark.getChapterId());
-					intent.putExtra(INTENT_SCRIPTURE_POSITION, sp);
+					intent.putExtra(IntentHelper.INTENT_SCRIPTURE_POSITION, sp);
 				    startActivity(intent);
 				}
 			});

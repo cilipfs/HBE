@@ -3,6 +3,7 @@ package sk.suchac.hbe;
 import java.util.ArrayList;
 
 import sk.suchac.hbe.db.DAO;
+import sk.suchac.hbe.helpers.IntentHelper;
 import sk.suchac.hbe.helpers.PreferencesHelper;
 import sk.suchac.hbe.objects.SearchOrder;
 import android.app.Activity;
@@ -54,8 +55,6 @@ public class SearchActivity extends Activity {
 	
 	private static final int SEARCH_STRING_MAX_LETTERS = 40;
 	private static final int SEARCH_STRING_MIN_LETTERS = 2;
-	
-	public final static String INTENT_SEARCH_ORDER = "sk.suchac.hbe.SEARCH_ORDER";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -178,7 +177,7 @@ public class SearchActivity extends Activity {
 				
 				SearchOrder order = new SearchOrder(searchString, bookIds);
 				Intent intent = new Intent(thisActivity, SearchResultsActivity.class);
-			    intent.putExtra(INTENT_SEARCH_ORDER, order);
+			    intent.putExtra(IntentHelper.INTENT_SEARCH_ORDER, order);
 			    startActivity(intent);
 			}
 		}

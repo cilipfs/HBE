@@ -4,6 +4,7 @@ import java.util.List;
 
 import sk.suchac.hbe.db.DAO;
 import sk.suchac.hbe.helpers.HistoryHelper;
+import sk.suchac.hbe.helpers.IntentHelper;
 import sk.suchac.hbe.helpers.PreferencesHelper;
 import sk.suchac.hbe.objects.Book;
 import sk.suchac.hbe.objects.HistoryRecord;
@@ -32,7 +33,6 @@ public class HistoryActivity extends Activity {
 	
 	private DAO datasource;
 	
-	public final static String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
 	private static boolean nightMode;
 	
 	private static Resources resources;
@@ -115,7 +115,7 @@ public class HistoryActivity extends Activity {
 					Intent intent = new Intent(thisActivity, ScriptureActivity.class);
 				    ScripturePosition sp = new ScripturePosition(record.getBookId(),
 				    		record.getChapterId());
-					intent.putExtra(INTENT_SCRIPTURE_POSITION, sp);
+					intent.putExtra(IntentHelper.INTENT_SCRIPTURE_POSITION, sp);
 				    startActivity(intent);
 				}
 			});

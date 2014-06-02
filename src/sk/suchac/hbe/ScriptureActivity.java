@@ -3,6 +3,7 @@ package sk.suchac.hbe;
 import sk.suchac.hbe.db.DAO;
 import sk.suchac.hbe.db.Magic;
 import sk.suchac.hbe.helpers.HistoryHelper;
+import sk.suchac.hbe.helpers.IntentHelper;
 import sk.suchac.hbe.helpers.PreferencesHelper;
 import sk.suchac.hbe.objects.Book;
 import sk.suchac.hbe.objects.Chapter;
@@ -39,7 +40,6 @@ public class ScriptureActivity extends Activity {
 	
 	private static boolean nightMode;
 	
-	public final static String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
 	ScripturePosition scriptPosition = new ScripturePosition();
 	
 	ScripturePosition scriptPrevious = new ScripturePosition();
@@ -70,7 +70,7 @@ public class ScriptureActivity extends Activity {
 		progressBar = (ProgressBar) findViewById(R.id.scripture_progressBar);
 		
 		Intent intent = getIntent();
-		scriptPosition = (ScripturePosition) intent.getSerializableExtra(MainActivity.INTENT_SCRIPTURE_POSITION);
+		scriptPosition = (ScripturePosition) intent.getSerializableExtra(IntentHelper.INTENT_SCRIPTURE_POSITION);
 		
 		calculatePreviousAndNextChapter();
 		setPreviousAndNextButtonText();
@@ -128,7 +128,7 @@ public class ScriptureActivity extends Activity {
 	            return true;
 			case R.id.show_bookmarks:
 				Intent intent2 = new Intent(this, BookmarkActivity.class);
-				intent2.putExtra(INTENT_SCRIPTURE_POSITION, scriptPosition);
+				intent2.putExtra(IntentHelper.INTENT_SCRIPTURE_POSITION, scriptPosition);
 			    startActivity(intent2);
 	            return true;
 			case R.id.show_settings:
@@ -284,7 +284,7 @@ public class ScriptureActivity extends Activity {
 		scriptPosition.setBook(scriptNext.getBook());
 		scriptPosition.setChapter(scriptNext.getChapter());
 		Intent intent = new Intent(this, ScriptureActivity.class);
-	    intent.putExtra(INTENT_SCRIPTURE_POSITION, scriptPosition);
+	    intent.putExtra(IntentHelper.INTENT_SCRIPTURE_POSITION, scriptPosition);
 	    startActivity(intent);
 	}
 	
@@ -293,7 +293,7 @@ public class ScriptureActivity extends Activity {
 		scriptPosition.setBook(scriptPrevious.getBook());
 		scriptPosition.setChapter(scriptPrevious.getChapter());
 		Intent intent = new Intent(this, ScriptureActivity.class);
-		intent.putExtra(INTENT_SCRIPTURE_POSITION, scriptPosition);
+		intent.putExtra(IntentHelper.INTENT_SCRIPTURE_POSITION, scriptPosition);
 	    startActivity(intent);
 	}
 	

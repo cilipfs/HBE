@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import sk.suchac.hbe.db.DAO;
+import sk.suchac.hbe.helpers.IntentHelper;
 import sk.suchac.hbe.helpers.PreferencesHelper;
 import sk.suchac.hbe.objects.Book;
 import sk.suchac.hbe.objects.ScripturePosition;
@@ -40,8 +41,6 @@ public class SearchResultsActivity extends Activity {
 	
 	private static boolean nightMode;
 	
-	public static final String INTENT_SCRIPTURE_POSITION = "sk.suchac.hbe.SCRIPTURE_POSITION";
-	public final static String INTENT_SEARCH_ORDER = "sk.suchac.hbe.SEARCH_ORDER";
 	SearchOrder order = new SearchOrder();
 	
 	private static final int MAX_RESULTS_DISPLAY = 100;
@@ -59,7 +58,7 @@ public class SearchResultsActivity extends Activity {
 		resultsContainer = (LinearLayout) findViewById(R.id.search_results_container);
 		
 		Intent intent = getIntent();
-		order = (SearchOrder) intent.getSerializableExtra(SearchActivity.INTENT_SEARCH_ORDER);
+		order = (SearchOrder) intent.getSerializableExtra(IntentHelper.INTENT_SEARCH_ORDER);
 		
 		datasource = new DAO(this);
 		datasource.open();
@@ -180,7 +179,7 @@ public class SearchResultsActivity extends Activity {
         				 Intent intent = new Intent(thisActivity, ScriptureActivity.class);
         				 ScripturePosition sp = new ScripturePosition(sResult.getBookId(),
         						 sResult.getChapterId());
-        				 intent.putExtra(INTENT_SCRIPTURE_POSITION, sp);
+        				 intent.putExtra(IntentHelper.INTENT_SCRIPTURE_POSITION, sp);
         				 startActivity(intent);
         			 }
         		 });
